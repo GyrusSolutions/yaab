@@ -7,7 +7,8 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -27,12 +28,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".RefreshScreen" android:taskAffinity="biz.gyrus.yaab.Dummy" android:excludeFromRecents="true" android:theme="@style/Theme.Transparent">
-            <intent-filter>
-				<action android:name="biz.gyrus.yaab.RefreshScreen"/>
-				<category android:name="android.intent.category.DEFAULT" />                
             </intent-filter>
         </activity>
         <service android:name=".LightMonitorService" android:enabled="true" />

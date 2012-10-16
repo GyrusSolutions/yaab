@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.WindowManager;
 
 public class LightMonitorService extends Service {
 	
@@ -37,6 +39,9 @@ public class LightMonitorService extends Service {
     private float _currentRunningReading = -2000f;
     private ArrayList<Float> _readings = null;
     private float _lastReading = -40000f;
+    
+    private ActivatorView _av = null;
+    private WindowManager.LayoutParams _avLayoutParams = null;
     
     private static LightMonitorService _instance = null;
     public static LightMonitorService getInstance() { return _instance; }
@@ -178,6 +183,13 @@ public class LightMonitorService extends Service {
 			Log.i("YAAB", "Listener registered");
 		}
 
+		_av = new ActivatorView(this);
+		_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.OPAQUE);
+		_avLayoutParams.screenBrightness = 20f;
+		
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		wm.addView(_av, _avLayoutParams);
+		
 		Log.i("YAAB", "Service onCreate() finished");
         
 	};
@@ -200,6 +212,13 @@ public class LightMonitorService extends Service {
 			_sensorManager.unregisterListener(_listener);
 		
 		cancelTimer();
+		
+		if(_av != null)
+		{
+			WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+			wm.removeView(_av);
+			_av = null;
+		}
 		
 		super.onDestroy();
 		_instance = null;
@@ -249,11 +268,17 @@ public class LightMonitorService extends Service {
         
 		Settings.System.putInt(LightMonitorService.this.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, iBrightness);
 		Log.i("YAAB", String.format("putInt with %d called.", iBrightness));
-        
+        /*
         Intent intent = new Intent(LightMonitorService.this, RefreshScreen.class); 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
         intent.putExtra("floatBrightness", brightness);  
         getApplication().startActivity(intent);
+        */
+		
+		_avLayoutParams.screenBrightness = brightness;
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		wm.updateViewLayout(_av, _avLayoutParams);
+		
 		Log.i("YAAB", String.format("refreshActivity started with %f", brightness));
 	}
 	
