@@ -1,13 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    >
 
     <Button
         android:id="@+id/btnOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:minWidth="80dip"
         android:layout_marginTop="71dp"
         android:text="@string/btn_start_text" />
 
@@ -16,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:minWidth="80dip"
         android:layout_below="@+id/btnOn"
         android:text="@string/btn_stop_text" />
 
@@ -42,8 +47,17 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="16dp"
-        android:text="@string/txt_disclamer" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnOff"
+        android:layout_marginTop="18dp"
+        android:text="@string/manual_adjust"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <SeekBar
+        android:id="@+id/sbAdjLevel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1" />
 
 </RelativeLayout>

@@ -20,7 +20,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -107,7 +109,7 @@ public class LightMonitorService extends Service {
 		        {
 					Log.i("YAAB", "Threshold defeated!");
 		        	_currentRunningReading = currentReading;
-		        	setBrightness(currentReadingBrightness);
+		        	applyRunningReading();
 		        }
 			}
 			else
@@ -115,7 +117,7 @@ public class LightMonitorService extends Service {
 				if(_currentRunningReading != _lastReading)
 				{
 					_currentRunningReading = _lastReading;
-		        	setBrightness(getBrightnessFromReading(_lastReading));
+		        	applyRunningReading();
 				}
 			}
 			
@@ -131,13 +133,12 @@ public class LightMonitorService extends Service {
 		
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
 			Log.i("YAAB", "Accuracy changed called!");
 		}
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			// TODO Auto-generated method stub
+
 			if(event.sensor.getType()==Sensor.TYPE_LIGHT){    
 				float currentReading = event.values[0];    
 				Log.i("YAAB", String.format("Float brightness: %f", currentReading));
@@ -152,14 +153,16 @@ public class LightMonitorService extends Service {
 		}
 	};
 	
+	public synchronized void applyRunningReading()
+	{
+		setBrightness(getBrightnessFromReading(_currentRunningReading));
+	}
+	
 	@Override
 	public void onCreate() 
 	{
 		_instance = this;
 		super.onCreate();
-		
-		registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
-		registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
 		_sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 		_lightSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -174,13 +177,20 @@ public class LightMonitorService extends Service {
 			//float max =  lightSensor.getMaximumRange();
 			
 			//lightMeter.setMax((int)max);         
-			//textMax.setText("Max Reading: " + String.valueOf(max));                   
-			_sensorManager.registerListener(
-					_listener,            
-					_lightSensor,            
-					SensorManager.SENSOR_DELAY_FASTEST);
-			
-			Log.i("YAAB", "Listener registered");
+			//textMax.setText("Max Reading: " + String.valueOf(max));
+        	
+        	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        	if(pm.isScreenOn())
+        	{
+				_sensorManager.registerListener(
+						_listener,            
+						_lightSensor,            
+						SensorManager.SENSOR_DELAY_FASTEST);
+				
+				Log.i("YAAB", "Listener registered");
+        	}
+        	else
+        		Log.i("YAAB", "Screen is off, skip listener registration.");
 		}
 
 		_av = new ActivatorView(this);
@@ -190,14 +200,30 @@ public class LightMonitorService extends Service {
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 		wm.addView(_av, _avLayoutParams);
 		
+		registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+		registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
+		
 		Log.i("YAAB", "Service onCreate() finished");
-        
 	};
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) 
 	{
 		Log.i("YAAB", "Service onStartCommand() called");
+		
+		int brightnessMode = 0;
+		
+		try {
+			 brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
+		} catch (SettingNotFoundException e) {
+			 e.printStackTrace();
+		}
+		
+		if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) 
+		{
+		    Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+		}
+
 		return super.onStartCommand(intent, flags, startId);
 	};
 	
@@ -226,7 +252,6 @@ public class LightMonitorService extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -234,7 +259,6 @@ public class LightMonitorService extends Service {
 	private void kickTimer()
 	{
 		Log.i("YAAB", "kickTimer in action");
-		//_h.removeCallbacks(_timerHandler);	// cancelling existing timers (what for btw?)
 		if(_bActive)
 			return;
 		
@@ -268,12 +292,6 @@ public class LightMonitorService extends Service {
         
 		Settings.System.putInt(LightMonitorService.this.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, iBrightness);
 		Log.i("YAAB", String.format("putInt with %d called.", iBrightness));
-        /*
-        Intent intent = new Intent(LightMonitorService.this, RefreshScreen.class); 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-        intent.putExtra("floatBrightness", brightness);  
-        getApplication().startActivity(intent);
-        */
 		
 		_avLayoutParams.screenBrightness = brightness;
 		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -284,6 +302,7 @@ public class LightMonitorService extends Service {
 	
 	private float getBrightnessFromReading(float reading)
 	{
-		return (float)(14*Math.log(reading) - 38)/100f;
+		AppSettings as = new AppSettings(this);
+		return (float)(14*Math.log(reading) - 38 + (as.getAdjshift() - 50))/100f;
 	}
 }

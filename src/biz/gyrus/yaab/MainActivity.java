@@ -11,8 +11,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +18,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	private Button _btnStop = null;
 	private CheckBox _cbAutoStart = null;
 	private TextView _txtStatus = null;
+	private SeekBar _sbAdjLevel = null;
 	
 	private Handler _h = new Handler();
 	
@@ -36,10 +37,33 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        setTitle(R.string.title_activity_main);
+        
         _btnStart = (Button) findViewById(R.id.btnOn);
         _btnStop = (Button) findViewById(R.id.btnOff);
         _cbAutoStart = (CheckBox) findViewById(R.id.cbAutostart);
         _txtStatus = (TextView) findViewById(R.id.txtStatus);
+        _sbAdjLevel = (SeekBar) findViewById(R.id.sbAdjLevel);
+        
+        _sbAdjLevel.setMax(100);
+        _sbAdjLevel.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) { }
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {	}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if(fromUser)
+				{
+					AppSettings as = new AppSettings(MainActivity.this);
+					as.setAdjshift(progress);
+					BrightnessController.get().updateRunningBrightness();
+				}
+			}
+		});
         
         _btnStart.setOnClickListener(new OnClickListener() {
 			
@@ -54,18 +78,6 @@ public class MainActivity extends Activity {
 				else
 					Log.i("YAAB", "Can't start it!");
 				
-				int brightnessMode = 0;
-				try {
-					 brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
-				} catch (SettingNotFoundException e) {
-					 // TODO Auto-generated catch block
-					 e.printStackTrace();
-				}
-				
-				if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) 
-				{
-				    Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-				}
 				
 				_h.postDelayed(new Runnable() {
 					
@@ -112,6 +124,9 @@ public class MainActivity extends Activity {
 		
 		AppSettings s = new AppSettings(this);
 		_cbAutoStart.setChecked(s.getAutostart());
+        _sbAdjLevel.setProgress(s.getAdjshift());
+        
+		updateStatus();
 	}
 	
 	protected void updateStatus()
