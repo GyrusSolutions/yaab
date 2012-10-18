@@ -8,6 +8,8 @@ package biz.gyrus.yaab;
 
 import java.util.ArrayList;
 
+import biz.gyrus.yaab.BrightnessController.ServiceStatus;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -162,23 +164,15 @@ public class LightMonitorService extends Service {
 	public void onCreate() 
 	{
 		_instance = this;
-		super.onCreate();
-		
-		_sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-		_lightSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-		
         Log.i("YAAB", "Service onCreate() called");
         
-		if (_lightSensor == null){         
-			Log.e("YAAB", "No light sensor present!");
-        } 
-        else
-        {         
-			//float max =  lightSensor.getMaximumRange();
-			
-			//lightMeter.setMax((int)max);         
-			//textMax.setText("Max Reading: " + String.valueOf(max));
-        	
+		super.onCreate();
+		
+		if(BrightnessController.get().isLightSensorPresent(this))
+		{
+			_sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+			_lightSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+	        
         	PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         	if(pm.isScreenOn())
         	{
@@ -191,17 +185,19 @@ public class LightMonitorService extends Service {
         	}
         	else
         		Log.i("YAAB", "Screen is off, skip listener registration.");
+	
+			_av = new ActivatorView(this);
+			_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.OPAQUE);
+			_avLayoutParams.screenBrightness = 20f;
+			
+			WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+			wm.addView(_av, _avLayoutParams);
+			
+			registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+			registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
+			
+			BrightnessController.get().updateServiceStatus(ServiceStatus.Running);
 		}
-
-		_av = new ActivatorView(this);
-		_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.OPAQUE);
-		_avLayoutParams.screenBrightness = 20f;
-		
-		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-		wm.addView(_av, _avLayoutParams);
-		
-		registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
-		registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
 		Log.i("YAAB", "Service onCreate() finished");
 	};
@@ -211,17 +207,25 @@ public class LightMonitorService extends Service {
 	{
 		Log.i("YAAB", "Service onStartCommand() called");
 		
-		int brightnessMode = 0;
-		
-		try {
-			 brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
-		} catch (SettingNotFoundException e) {
-			 e.printStackTrace();
-		}
-		
-		if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) 
+		if(BrightnessController.get().isLightSensorPresent(this))
 		{
-		    Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+			int brightnessMode = 0;
+			
+			try {
+				 brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
+			} catch (SettingNotFoundException e) {
+				 e.printStackTrace();
+			}
+			
+			if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) 
+			{
+			    Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+			}
+		}
+		else
+		{
+			Log.w("YAAB", "Started on a device without light sensor. How could this happen at all?!!");
+			stopSelf();
 		}
 
 		return super.onStartCommand(intent, flags, startId);
@@ -229,12 +233,14 @@ public class LightMonitorService extends Service {
 	
 	@Override
 	public void onDestroy() {
+		
 		Log.i("YAAB", "Service onDestroy() called");
+		BrightnessController.get().updateServiceStatus(ServiceStatus.Stopped);
 		
 		unregisterReceiver(_brScrOFF);
 		unregisterReceiver(_brScrON);
 		
-		if(_sensorManager != null)
+		if(_sensorManager != null && _listener != null)
 			_sensorManager.unregisterListener(_listener);
 		
 		cancelTimer();
@@ -302,7 +308,6 @@ public class LightMonitorService extends Service {
 	
 	private float getBrightnessFromReading(float reading)
 	{
-		AppSettings as = new AppSettings(this);
-		return (float)(14*Math.log(reading) - 38 + (as.getAdjshift() - 50))/100f;
+		return (float)(14*Math.log(reading) - 38 + BrightnessController.get().getManualAdjustment())/100f;
 	}
 }

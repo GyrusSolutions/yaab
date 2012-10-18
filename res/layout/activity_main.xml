@@ -44,7 +44,7 @@
         android:text="@string/cb_autostart_text" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/lblManualAdjustment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -58,6 +58,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1" />
+        android:layout_below="@+id/lblManualAdjustment" />
+
+    <TextView
+        android:id="@+id/lblHowToUse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sbAdjLevel"
+        android:layout_alignRight="@+id/sbAdjLevel"
+        android:layout_below="@+id/sbAdjLevel"
+        android:layout_marginTop="26dp"
+        android:text="@string/txt_howto_use" />
 
 </RelativeLayout>

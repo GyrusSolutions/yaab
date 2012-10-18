@@ -6,11 +6,16 @@
 
 package biz.gyrus.yaab;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import biz.gyrus.yaab.BrightnessController.ServiceStatus;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,8 +34,23 @@ public class MainActivity extends Activity {
 	private CheckBox _cbAutoStart = null;
 	private TextView _txtStatus = null;
 	private SeekBar _sbAdjLevel = null;
+	private TextView _lblManualAdj = null;
+	private TextView _lblBtmComment = null;
 	
-	private Handler _h = new Handler();
+	private Observer _oServiceStatus = new Observer() {
+		
+		@Override
+		public void update(Observable observable, Object data) {
+			
+			runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					updateControls();
+				}
+			});
+		}
+	};
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,11 +58,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         setTitle(R.string.title_activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         _btnStart = (Button) findViewById(R.id.btnOn);
         _btnStop = (Button) findViewById(R.id.btnOff);
         _cbAutoStart = (CheckBox) findViewById(R.id.cbAutostart);
         _txtStatus = (TextView) findViewById(R.id.txtStatus);
+        _lblManualAdj = (TextView) findViewById(R.id.lblManualAdjustment);
+        _lblBtmComment = (TextView) findViewById(R.id.lblHowToUse);
         _sbAdjLevel = (SeekBar) findViewById(R.id.sbAdjLevel);
         
         _sbAdjLevel.setMax(100);
@@ -58,8 +81,7 @@ public class MainActivity extends Activity {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				if(fromUser)
 				{
-					AppSettings as = new AppSettings(MainActivity.this);
-					as.setAdjshift(progress);
+					BrightnessController.get().setManualAdjustment(progress - seekBar.getMax()/2);
 					BrightnessController.get().updateRunningBrightness();
 				}
 			}
@@ -77,15 +99,6 @@ public class MainActivity extends Activity {
 				}
 				else
 					Log.i("YAAB", "Can't start it!");
-				
-				
-				_h.postDelayed(new Runnable() {
-					
-					@Override
-					public void run() {
-						updateStatus();
-					}
-				}, 500);
 			}
         });
         
@@ -95,14 +108,6 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Log.i("YAAB", "Stopping service...");
 				stopService(new Intent(MainActivity.this, LightMonitorService.class));
-				
-				_h.postDelayed(new Runnable() {
-					
-					@Override
-					public void run() {
-						updateStatus();
-					}
-				}, 500);
 			}
 		});
         
@@ -119,22 +124,69 @@ public class MainActivity extends Activity {
 	}
 	
 	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		BrightnessController.get().removeServiceStatusObserver(_oServiceStatus);
+
+		AppSettings as = new AppSettings(this);
+		as.setAdjshift(_sbAdjLevel.getProgress() - _sbAdjLevel.getMax()/2);
+		
+	}
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		
 		AppSettings s = new AppSettings(this);
-		_cbAutoStart.setChecked(s.getAutostart());
-        _sbAdjLevel.setProgress(s.getAdjshift());
+        _sbAdjLevel.setProgress(_sbAdjLevel.getMax()/2 + s.getAdjshift());
+        BrightnessController.get().setManualAdjustment(s.getAdjshift());
+
+        if(!BrightnessController.get().isLightSensorPresent(this))
+		{
+			_txtStatus.setText(R.string.status_nosensor);
+			_txtStatus.setTextColor(getResources().getColor(R.color.StatusError));
+			
+			_btnStart.setEnabled(false);
+			_btnStop.setEnabled(false);
+			
+			_cbAutoStart.setEnabled(false);
+			_cbAutoStart.setChecked(false);
+			
+			_sbAdjLevel.setEnabled(false);
+			
+			_lblBtmComment.setText(R.string.txt_nolightsensor_sorry);
+		}
+		else
+		{
+			_cbAutoStart.setEnabled(true);
+			_cbAutoStart.setChecked(s.getAutostart());
+			_lblBtmComment.setText(R.string.txt_howto_use);
+
+			updateControls();
+		}
         
-		updateStatus();
+        BrightnessController.get().addServiceStatusObserver(_oServiceStatus);
 	}
 	
-	protected void updateStatus()
+	protected void updateControls()
 	{
-		if(LightMonitorService.getInstance() != null)
+		final ServiceStatus ssCurrent = BrightnessController.get().getServiceStatus();
+		
+		_btnStart.setEnabled(ssCurrent != ServiceStatus.Running);
+		_btnStop.setEnabled(ssCurrent != ServiceStatus.Stopped);
+		_sbAdjLevel.setEnabled(ssCurrent == ServiceStatus.Running);
+		
+		if(ssCurrent == ServiceStatus.Running)
+		{
 			_txtStatus.setText(R.string.status_running);
-		else
+			_txtStatus.setTextColor(getResources().getColor(R.color.StatusHealthy));
+		}
+		if(ssCurrent == ServiceStatus.Stopped)
+		{
 			_txtStatus.setText(R.string.status_stopped);
+			_txtStatus.setTextColor(_lblManualAdj.getTextColors().getDefaultColor());
+		}
+		
 	}
-    
 }

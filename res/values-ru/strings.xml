@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="app_name">Автояркость (бета)</string>
+    <string name="title_activity_main">Еще Одна Автояркость</string>
+    <string name="btn_start_text">Пуск</string>
+    <string name="btn_stop_text">Стоп</string>
+    <string name="cb_autostart_text">Автозапуск</string>
+    <string name="status_running">Активен</string>
+    <string name="status_stopped">Остановлен</string>
+    <string name="status_nosensor">Нет сенсора освещенности</string>
+    
+    <string name="toast_service_started">Сервис автояркости запущен!</string>
+    <string name="toast_service_stopped">Сервис автояркости отсановлен!</string>
+    
+    <string name="manual_adjust">Ручная подстройка</string>
+
+    <string name="txt_howto_use">КАК ПОЛЬЗОВАТЬСЯ: Нажмите \"Пуск\", подождите пока статус обновится до \"Активен\". Это всё. Используя регулятор \"Ручная подстройка\", можно изменять средний уровень яркости.</string>
+    <string name="txt_nolightsensor_sorry">К сожалению сенсор освещенности не найден в этом устройстве. Данное приложение не может функционировать без этого сенсора.</string>
+</resources>

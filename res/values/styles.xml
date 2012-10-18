@@ -11,5 +11,7 @@
 		<item name="android:backgroundDimEnabled">false</item>  
 	</style> 
     
+    <color name="StatusError">#FF0000</color>
+    <color name="StatusHealthy">#00A000</color>
     
 </resources>
