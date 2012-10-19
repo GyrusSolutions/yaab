@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.util.Log;
 
 @SuppressLint("CommitPrefEdits")
@@ -13,6 +14,7 @@ public class AppSettings {
 	private static final String _prefsName = "thesettings";
 	private static final String _autostartName = "autoStartOnDeviceBoot";
 	private static final String _adjshiftName = "adjShift";
+	private static final String _persistNotifName = "persistNotification";
 	private static final String _saverAppVerName = "savedByAppVersion";
 	
 	private Context _ctx = null;
@@ -49,7 +51,7 @@ public class AppSettings {
 		if(sp.getInt(_saverAppVerName, 1) == 1)
 		{
 			SharedPreferences.Editor e = sp.edit();
-			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 0) - 50);
+			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 50) - 50);
 			commitAndLog(e);
 		}
 	}
@@ -87,6 +89,20 @@ public class AppSettings {
 		SharedPreferences.Editor e = getSP().edit();
 		
 		e.putInt(_adjshiftName, val);
+		
+		commitAndLog(e);
+	}
+	
+	public Boolean getPersistNotification()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getBoolean(_persistNotifName, Build.VERSION.SDK_INT > 10);	// offering the icon by default for Android 3.x and newer
+	}
+	public void setPersistNotification(boolean bPersist)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putBoolean(_persistNotifName, bPersist);
 		
 		commitAndLog(e);
 	}

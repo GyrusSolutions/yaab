@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
 	private Button _btnStart = null;
 	private Button _btnStop = null;
 	private CheckBox _cbAutoStart = null;
+	private CheckBox _cbPersistNotification = null;
 	private TextView _txtStatus = null;
 	private SeekBar _sbAdjLevel = null;
 	private TextView _lblManualAdj = null;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
         _btnStart = (Button) findViewById(R.id.btnOn);
         _btnStop = (Button) findViewById(R.id.btnOff);
         _cbAutoStart = (CheckBox) findViewById(R.id.cbAutostart);
+        _cbPersistNotification = (CheckBox) findViewById(R.id.cbNotifIcon);
         _txtStatus = (TextView) findViewById(R.id.txtStatus);
         _lblManualAdj = (TextView) findViewById(R.id.lblManualAdjustment);
         _lblBtmComment = (TextView) findViewById(R.id.lblHowToUse);
@@ -92,6 +94,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.i("YAAB", "Starting service...");
+				saveManualAdjustment();
 				ComponentName cn = startService(new Intent(MainActivity.this, LightMonitorService.class));
 				if(cn != null)
 				{
@@ -115,12 +118,32 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				
+				Log.i("YAAB", String.format("Saving autostart: %b", isChecked));
 				AppSettings s = new AppSettings(MainActivity.this);
 				s.setAutostart(isChecked);
 			}
 		});
         
+        _cbPersistNotification.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				Log.i("YAAB", String.format("Saving persist notification: %b", isChecked));
+				AppSettings s = new AppSettings(MainActivity.this);
+				s.setPersistNotification(isChecked);
+				
+				LightMonitorService lms = LightMonitorService.getInstance();
+				if(lms != null)
+					lms.showNotificationIcon(isChecked && BrightnessController.get().getServiceStatus() == ServiceStatus.Running);
+			}
+		});
+        
+	}
+	
+	protected void saveManualAdjustment()
+	{
+		AppSettings as = new AppSettings(this);
+		as.setAdjshift(_sbAdjLevel.getProgress() - _sbAdjLevel.getMax()/2);
 	}
 	
 	@Override
@@ -129,9 +152,7 @@ public class MainActivity extends Activity {
 		
 		BrightnessController.get().removeServiceStatusObserver(_oServiceStatus);
 
-		AppSettings as = new AppSettings(this);
-		as.setAdjshift(_sbAdjLevel.getProgress() - _sbAdjLevel.getMax()/2);
-		
+		saveManualAdjustment();
 	}
 	
 	@Override
@@ -153,6 +174,9 @@ public class MainActivity extends Activity {
 			_cbAutoStart.setEnabled(false);
 			_cbAutoStart.setChecked(false);
 			
+			_cbPersistNotification.setEnabled(false);
+			_cbPersistNotification.setChecked(false);
+			
 			_sbAdjLevel.setEnabled(false);
 			
 			_lblBtmComment.setText(R.string.txt_nolightsensor_sorry);
@@ -161,6 +185,8 @@ public class MainActivity extends Activity {
 		{
 			_cbAutoStart.setEnabled(true);
 			_cbAutoStart.setChecked(s.getAutostart());
+			_cbPersistNotification.setEnabled(true);
+			_cbPersistNotification.setChecked(s.getPersistNotification());
 			_lblBtmComment.setText(R.string.txt_howto_use);
 
 			updateControls();

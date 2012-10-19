@@ -23,8 +23,6 @@ public class DeviceBootReceiver extends BroadcastReceiver {
 		{
 			Log.i("YAAB", "Autostart configured, starting service.");
 			
-			BrightnessController.get().setManualAdjustment(s.getAdjshift());
-			
 			Intent srvIntent = new Intent(ctx, LightMonitorService.class);
 			ctx.startService(srvIntent);
 		}

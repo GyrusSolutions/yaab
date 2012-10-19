@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import biz.gyrus.yaab.BrightnessController.ServiceStatus;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,6 +27,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -101,8 +104,8 @@ public class LightMonitorService extends Service {
 		        
 		        Log.i("YAAB", "AVG reading: " + currentReading);
 		        
-		        float currentReadingBrightness = getBrightnessFromReading(currentReading);
-		        float currentRunningBrightness = getBrightnessFromReading(_currentRunningReading);
+		        float currentReadingBrightness = BrightnessController.get().getBrightnessFromReading(currentReading);
+		        float currentRunningBrightness = BrightnessController.get().getBrightnessFromReading(_currentRunningReading);
 		        
 		        Log.i("YAAB", "ReadingBrightness: " + currentReadingBrightness);
 		        Log.i("YAAB", "RunningBrightness: " + currentRunningBrightness);
@@ -157,7 +160,7 @@ public class LightMonitorService extends Service {
 	
 	public synchronized void applyRunningReading()
 	{
-		setBrightness(getBrightnessFromReading(_currentRunningReading));
+		setBrightness(BrightnessController.get().getBrightnessFromReading(_currentRunningReading));
 	}
 	
 	@Override
@@ -170,6 +173,9 @@ public class LightMonitorService extends Service {
 		
 		if(BrightnessController.get().isLightSensorPresent(this))
 		{
+			AppSettings as = new AppSettings(this);
+			showNotificationIcon(as.getPersistNotification());
+			
 			_sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 			_lightSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 	        
@@ -185,6 +191,8 @@ public class LightMonitorService extends Service {
         	}
         	else
         		Log.i("YAAB", "Screen is off, skip listener registration.");
+        	
+        	BrightnessController.get().setManualAdjustment(as.getAdjshift());
 	
 			_av = new ActivatorView(this);
 			_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.OPAQUE);
@@ -252,6 +260,8 @@ public class LightMonitorService extends Service {
 			_av = null;
 		}
 		
+		showNotificationIcon(false);
+		
 		super.onDestroy();
 		_instance = null;
 	}
@@ -306,8 +316,25 @@ public class LightMonitorService extends Service {
 		Log.i("YAAB", String.format("refreshActivity started with %f", brightness));
 	}
 	
-	private float getBrightnessFromReading(float reading)
+	public void showNotificationIcon(boolean bShow)
 	{
-		return (float)(14*Math.log(reading) - 38 + BrightnessController.get().getManualAdjustment())/100f;
+		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		if(bShow)
+		{
+			Intent ni = new Intent(this, MainActivity.class);
+			PendingIntent pi = PendingIntent.getActivity(this, 0, ni, PendingIntent.FLAG_CANCEL_CURRENT);
+	
+			NotificationCompat.Builder nb = new NotificationCompat.Builder(this);
+			nb.setContentIntent(pi).setAutoCancel(false)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setWhen(System.currentTimeMillis())
+				.setContentTitle(getResources().getString(R.string.app_name))
+				.setContentText(getResources().getString(R.string.status_running));
+			
+			nm.notify(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID, nb.getNotification());
+		}
+		else
+			nm.cancel(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID);
 	}
 }

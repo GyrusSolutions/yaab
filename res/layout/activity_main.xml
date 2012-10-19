@@ -70,4 +70,13 @@
         android:layout_marginTop="26dp"
         android:text="@string/txt_howto_use" />
 
+    <CheckBox
+        android:id="@+id/cbNotifIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnOn"
+        android:layout_alignBottom="@+id/btnOn"
+        android:layout_alignLeft="@+id/cbAutostart"
+        android:text="@string/cb_notificon_text" />
+
 </RelativeLayout>

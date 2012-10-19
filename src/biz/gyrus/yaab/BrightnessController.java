@@ -61,6 +61,11 @@ public class BrightnessController {
 	{
 		_iManualAdjustmentValue = val;
 	}
+	public float getBrightnessFromReading(float reading)
+	{
+		return (float)(14*Math.log(reading) - 38 + _iManualAdjustmentValue)/100f;
+	}
+	
 	
 	public void addServiceStatusObserver(Observer o)
 	{
