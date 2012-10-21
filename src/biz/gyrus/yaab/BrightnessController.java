@@ -31,9 +31,26 @@ public class BrightnessController {
 		}
 	}
 	
+	private static class RunningBrightnessObservable extends Observable
+	{
+		private int _iRunningBrightness = 0;
+		
+		public int getRunningBrightness() { return _iRunningBrightness; }
+		
+		public void setRunningBrightness(int brightness)
+		{
+			if(_iRunningBrightness != brightness)
+				setChanged();
+			
+			_iRunningBrightness = brightness;
+			notifyObservers();
+		}
+	}
+	
 	private Boolean _bIsSensorPresent = null;
 	private int _iManualAdjustmentValue = 0;
 	private ServiceStatusObservable _oServStatus = new ServiceStatusObservable();
+	private RunningBrightnessObservable _oRunningBrightness = new RunningBrightnessObservable();
 	
 	public boolean isLightSensorPresent(Context ctx)
 	{
@@ -80,4 +97,19 @@ public class BrightnessController {
 		_oServStatus.setStatus(ss);
 	}
 	public ServiceStatus getServiceStatus() { return _oServStatus.getStatus(); }
+	
+	
+	public void addRunningBrightnessObserver(Observer o)
+	{
+		_oRunningBrightness.addObserver(o);
+	}
+	public void removeRunningBrightnessObserver(Observer o)
+	{
+		_oRunningBrightness.deleteObserver(o);
+	}
+	public void setRunningBrightness(int brightness)
+	{
+		_oRunningBrightness.setRunningBrightness(brightness);
+	}
+	public int getRunningBrightness() { return _oRunningBrightness.getRunningBrightness(); }
 }

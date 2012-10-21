@@ -17,6 +17,11 @@
 
     <string name="txt_howto_use">HOW TO USE: Tap \"Start\", wait until status change to \"Running\". That is all. Use \"Manual adjustment\" slider to change average level of brightness if needed.\n"Persist notification" may be useful on devices running Android 3.x and newer on 512MB RAM. It helps the service to survive while the system is hunting for resources.</string>
     <string name="txt_nolightsensor_sorry">Sorry, light sensor can\'t be found on this device. This application is not functional without the sensor.</string>
+
+    <string name="title_activity_credits">Yet Another Auto Brightness</string>
+    <string name="activity_credits_txt_title">Credits</string>
+    <string name="activity_credits_txt_main">This application developed and supported by <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nSource code and development builds are available at <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <string name="activity_credits_btn_close">Close</string>
     
 </resources>
  

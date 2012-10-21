@@ -18,7 +18,6 @@ public class AppSettings {
 	private static final String _saverAppVerName = "savedByAppVersion";
 	
 	private Context _ctx = null;
-	//private String _verName = null;
 	private int _verNum = 1;
 	
 	public AppSettings(Context ctx)
@@ -27,11 +26,10 @@ public class AppSettings {
 		try {
 
 			PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
-			//_verName = pInfo.versionName; 
 			_verNum = pInfo.versionCode;
 			
 		} catch (NameNotFoundException e) {
-			Log.e("YAAB", "Can't get package name.");
+			Log.e(Globals.TAG, "Can't get package name.");
 			e.printStackTrace();
 		} 
 	}
@@ -48,12 +46,14 @@ public class AppSettings {
 	
 	private void upgradePrefs(SharedPreferences sp)
 	{
+		Log.d(Globals.TAG, "upgradePrefs starting.");
 		if(sp.getInt(_saverAppVerName, 1) == 1)
 		{
 			SharedPreferences.Editor e = sp.edit();
-			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 50) - 50);
+			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 50) - Globals.ADJUSTMENT_RANGE_INT);
 			commitAndLog(e);
 		}
+		Log.d(Globals.TAG, "upgradePrefs done.");
 	}
 	
 	private void commitAndLog(SharedPreferences.Editor e)
@@ -61,7 +61,7 @@ public class AppSettings {
 		e.putInt(_saverAppVerName, _verNum);
 		if(!e.commit())
 		{
-			Log.e("YAAB", "Failed to save settings.");
+			Log.e(Globals.TAG, "Failed to save settings.");
 		}
 	}
 	

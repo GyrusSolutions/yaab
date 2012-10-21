@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/miCredits" android:titleCondensed="@string/activity_credits_txt_title" android:title="@string/activity_credits_txt_title"></item>
+    
+
+</menu>

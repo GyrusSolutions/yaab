@@ -5,14 +5,23 @@
     android:paddingLeft="8dip"
     android:paddingRight="8dip"
     >
-
+	<ProgressBar 
+	    android:id="@+id/pbCurrent"
+	    android:layout_width="match_parent"
+	    android:layout_height="6dip"
+        android:layout_marginTop="50dip"
+        android:layout_marginRight="3dip"
+        android:layout_marginLeft="3dip"
+        style="@style/brightnessIndicator"
+	    />
+	
     <Button
         android:id="@+id/btnOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:minWidth="80dip"
-        android:layout_marginTop="71dp"
+        android:layout_marginTop="71dip"
         android:text="@string/btn_start_text" />
 
     <Button
@@ -30,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="12dp"
         android:text="@string/status_stopped"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

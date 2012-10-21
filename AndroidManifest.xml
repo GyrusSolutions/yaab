@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="biz.gyrus.yaab"
-    android:versionCode="5"
-    android:versionName="1.3" >
+    android:versionCode="6"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -22,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+	    <activity android:name=".CreditsActivity" android:enabled="true" android:launchMode="standard" android:exported="false">
+	    	<intent-filter>
+	    		<action android:name="biz.gyrus.yaab.CREDITS" />
+	    		<category android:name="android.intent.category.DEFAULT" />
+	    	</intent-filter>
+	    </activity>
         <service android:name=".LightMonitorService" android:enabled="true" />
     </application>
 

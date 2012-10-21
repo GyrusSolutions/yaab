@@ -17,4 +17,10 @@
 
     <string name="txt_howto_use">MODO DE EMPLEO: Pulse \"Iniciar\", espere hasta que el cambio de estado a \"Funcionamiento\". Eso es todo. Use \"Ajuste manual\" control deslizante para cambiar el nivel medio de brillo si es necesario.\n"Notificación persistente" puede ser útil en dispositivos que ejecutan sobre Android 3.x y posteriores de 512MB RAM. Ayuda a que el servicio de sobrevivir mientras el sistema está a la caza de los recursos.</string>
     <string name="txt_nolightsensor_sorry">Lo sentimos, sensor de luz no se puede encontrar en este dispositivo. Esta aplicación no está funcionar sin el sensor.</string>
+
+    <string name="title_activity_credits">Otro Auto Brillo</string>
+    <string name="activity_credits_txt_title">Información</string>
+    <string name="activity_credits_txt_main">Esta aplicación desarrollada con el apoyo de <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nEl código fuente y las versiones en desarrollo se encuentran disponibles en <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nEL SOFTWARE SE ENTREGA \"TAL CUAL\", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO SIN LIMITARSE A GARANTÍAS DE MERCANTIBILIDAD, CAPACIDAD DE HACER Y DE NO INFRACCIÓN DE COPYRIGHT. EN NINGÚN CASO LOS AUTORES O TITULARES DEL COPYRIGHT SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UN LITIGIO, AGRAVIO O DE OTRO MODO, DERIVADAS DE, OCASIONADAS POR CULPA DE O EN CONEXION CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.</string>
+    <string name="activity_credits_btn_close">Cerrar</string>
+    
 </resources>

@@ -17,12 +17,16 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ public class MainActivity extends Activity {
 	private SeekBar _sbAdjLevel = null;
 	private TextView _lblManualAdj = null;
 	private TextView _lblBtmComment = null;
+	private ProgressBar _pbCurrent = null;
 	
 	private Observer _oServiceStatus = new Observer() {
 		
@@ -48,6 +53,23 @@ public class MainActivity extends Activity {
 				@Override
 				public void run() {
 					updateControls();
+				}
+			});
+		}
+	};
+	
+	private Observer _oRunningBrightness = new Observer() {
+		
+		@Override
+		public void update(Observable observable, Object data) {
+			
+			runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					_pbCurrent.setProgress(BrightnessController.get().getRunningBrightness());
+					
 				}
 			});
 		}
@@ -69,8 +91,11 @@ public class MainActivity extends Activity {
         _lblManualAdj = (TextView) findViewById(R.id.lblManualAdjustment);
         _lblBtmComment = (TextView) findViewById(R.id.lblHowToUse);
         _sbAdjLevel = (SeekBar) findViewById(R.id.sbAdjLevel);
+        _pbCurrent= (ProgressBar) findViewById(R.id.pbCurrent);
         
-        _sbAdjLevel.setMax(100);
+        _pbCurrent.setMax(Globals.MAX_BRIGHTNESS_INT);
+        
+        _sbAdjLevel.setMax(Globals.ADJUSTMENT_RANGE_INT);
         _sbAdjLevel.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
@@ -93,15 +118,15 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Log.i("YAAB", "Starting service...");
+				Log.i(Globals.TAG, "Starting service...");
 				saveManualAdjustment();
 				ComponentName cn = startService(new Intent(MainActivity.this, LightMonitorService.class));
 				if(cn != null)
 				{
-					Log.i("YAAB", String.format("Service Component name: %s", cn.toShortString()));
+					Log.i(Globals.TAG, String.format("Service Component name: %s", cn.toShortString()));
 				}
 				else
-					Log.i("YAAB", "Can't start it!");
+					Log.i(Globals.TAG, "Can't start it!");
 			}
         });
         
@@ -109,7 +134,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Log.i("YAAB", "Stopping service...");
+				Log.i(Globals.TAG, "Stopping service...");
 				stopService(new Intent(MainActivity.this, LightMonitorService.class));
 			}
 		});
@@ -118,7 +143,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Log.i("YAAB", String.format("Saving autostart: %b", isChecked));
+				Log.i(Globals.TAG, String.format("Saving autostart: %b", isChecked));
 				AppSettings s = new AppSettings(MainActivity.this);
 				s.setAutostart(isChecked);
 			}
@@ -128,7 +153,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Log.i("YAAB", String.format("Saving persist notification: %b", isChecked));
+				Log.i(Globals.TAG, String.format("Saving persist notification: %b", isChecked));
 				AppSettings s = new AppSettings(MainActivity.this);
 				s.setPersistNotification(isChecked);
 				
@@ -151,6 +176,7 @@ public class MainActivity extends Activity {
 		super.onPause();
 		
 		BrightnessController.get().removeServiceStatusObserver(_oServiceStatus);
+        BrightnessController.get().removeRunningBrightnessObserver(_oRunningBrightness);
 
 		saveManualAdjustment();
 	}
@@ -180,6 +206,8 @@ public class MainActivity extends Activity {
 			_sbAdjLevel.setEnabled(false);
 			
 			_lblBtmComment.setText(R.string.txt_nolightsensor_sorry);
+			
+			_pbCurrent.setVisibility(View.GONE);
 		}
 		else
 		{
@@ -189,10 +217,13 @@ public class MainActivity extends Activity {
 			_cbPersistNotification.setChecked(s.getPersistNotification());
 			_lblBtmComment.setText(R.string.txt_howto_use);
 
+			_pbCurrent.setVisibility(View.VISIBLE);
+			
 			updateControls();
 		}
         
         BrightnessController.get().addServiceStatusObserver(_oServiceStatus);
+        BrightnessController.get().addRunningBrightnessObserver(_oRunningBrightness);
 	}
 	
 	protected void updateControls()
@@ -207,12 +238,45 @@ public class MainActivity extends Activity {
 		{
 			_txtStatus.setText(R.string.status_running);
 			_txtStatus.setTextColor(getResources().getColor(R.color.StatusHealthy));
+			_pbCurrent.setProgress(BrightnessController.get().getRunningBrightness());
 		}
 		if(ssCurrent == ServiceStatus.Stopped)
 		{
 			_txtStatus.setText(R.string.status_stopped);
 			_txtStatus.setTextColor(_lblManualAdj.getTextColors().getDefaultColor());
+			_pbCurrent.setProgress(0);
 		}
 		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater i = getMenuInflater();
+		i.inflate(R.menu.activity_main, menu);
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch(item.getItemId())
+		{
+		case R.id.miCredits:
+			try
+			{
+				Intent creditsIntent = new Intent("biz.gyrus.yaab.CREDITS");
+		        startActivity(creditsIntent);
+		        Log.i(Globals.TAG, "Preferences activity started");
+			} catch(Exception e)
+			{
+				Log.e(Globals.TAG, e.getMessage(), e);
+			}
+			
+			return true;
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 }

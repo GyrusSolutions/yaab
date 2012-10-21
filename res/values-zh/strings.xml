@@ -17,4 +17,10 @@
 
     <string name="txt_howto_use">如何使用：点击“开始”，“运行”等待状态的变化。这就是一切。使用“手动调整”滑块以更改亮度平均水平，如果需要的话。\n“坚持的通知”，可能是有用的设备上运行Android3.x和更高版本上512MB RAM。它有助于服务生存当系统正在通缉资源。</string>
     <string name="txt_nolightsensor_sorry">很抱歉，光线感应器不能在此设备上。该应用程序不是功能而不传感器。</string>
+
+    <string name="title_activity_credits">又一自动亮度</string>
+    <string name="activity_credits_txt_title">信息</string>
+    <string name="activity_credits_txt_main">This application developed and supported by <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nSource code and development builds are available at <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <string name="activity_credits_btn_close">关闭</string>
+    
 </resources>
