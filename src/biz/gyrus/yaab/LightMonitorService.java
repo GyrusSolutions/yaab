@@ -318,7 +318,7 @@ public class LightMonitorService extends Service {
 	
 	public void showNotificationIcon(boolean bShow)
 	{
-		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		//NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		if(bShow)
 		{
@@ -332,9 +332,13 @@ public class LightMonitorService extends Service {
 				.setContentTitle(getResources().getString(R.string.app_name))
 				.setContentText(getResources().getString(R.string.status_running));
 			
-			nm.notify(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID, nb.getNotification());
+			//nm.notify(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID, nb.getNotification());
+			startForeground(Globals.NOTIFICATION_ID, nb.getNotification());
 		}
 		else
-			nm.cancel(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID);
+		{
+			//nm.cancel(Globals.NOTIFICATION_TAG, Globals.NOTIFICATION_ID);
+			stopForeground(true);
+		}
 	}
 }
