@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="app_name">עב\'\'א</string>
+    <string name="title_activity_main">עוד בהירות אוטומטית</string>
+    <string name="btn_start_text">התחל</string>
+    <string name="btn_stop_text">להפסיק</string>
+    <string name="cb_autostart_text">פתח באתחול מכשיר</string>
+    <string name="cb_notificon_text">הודעה עיקשת</string>
+    <string name="status_running">פעיל</string>
+    <string name="status_stopped">לא פעיל</string>
+    <string name="status_nosensor">אין חיישן אור</string>
+    
+    <string name="toast_service_started">עב\'\'א השירות התחיל!</string>
+    <string name="toast_service_stopped">עב\'\'א השירות הפסיק!</string>
+    
+    <string name="manual_adjust">כיוונון ידני</string>
+
+  	<string name="txt_howto_use">אופן שימוש: הקש \"התחל\", ולהמתין עד לשינוי המצב ל\"פעיל\". זה הכל. השתמש במחוון \"כיוונון ידני\" לשינוי רמה ממוצעת של בהירות במידת צורך. \"הודעה העיקשת\" עשוי להיות שימושי בהתקנים פועלים אנדרואיד  ומעלה על 512 מגה זכרון. זה עוזר לשירות כדי לשרוד בזמן שהמערכת מחפשת את המשאבים</string>
+    <string name="txt_nolightsensor_sorry">.מצטער, חיישן אור לא ניתן למצוא בהמכשיר הזה. יישום זה לא פונקציונלי ללא החיישן</string>
+</resources>

@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="app_name">又一自动亮度</string>
+    <string name="title_activity_main">又一自动亮度</string>
+    <string name="btn_start_text">启动</string>
+    <string name="btn_stop_text">停止</string>
+    <string name="cb_autostart_text">设备启动的开始</string>
+    <string name="cb_notificon_text">永久通知</string>
+    <string name="status_running">在运行</string>
+    <string name="status_stopped">停止了</string>
+    <string name="status_nosensor">没有光线感应器</string>
+    
+    <string name="toast_service_started">YAAB服务启动了</string>
+    <string name="toast_service_stopped">YAAB服务停止了</string>
+    
+    <string name="manual_adjust">手动调整</string>
+
+    <string name="txt_howto_use">如何使用：点击“开始”，“运行”等待状态的变化。这就是一切。使用“手动调整”滑块以更改亮度平均水平，如果需要的话。\n“坚持的通知”，可能是有用的设备上运行Android3.x和更高版本上512MB RAM。它有助于服务生存当系统正在通缉资源。</string>
+    <string name="txt_nolightsensor_sorry">很抱歉，光线感应器不能在此设备上。该应用程序不是功能而不传感器。</string>
+</resources>

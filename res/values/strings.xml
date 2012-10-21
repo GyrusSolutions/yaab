@@ -16,5 +16,7 @@
     <string name="manual_adjust">Manual adjustment</string>
 
     <string name="txt_howto_use">HOW TO USE: Tap \"Start\", wait until status change to \"Running\". That is all. Use \"Manual adjustment\" slider to change average level of brightness if needed.\n"Persist notification" may be useful on devices running Android 3.x and newer on 512MB RAM. It helps the service to survive while the system is hunting for resources.</string>
-    <string name="txt_nolightsensor_sorry">Sorry, light sensor can\'t be found on this device. This application is not functional withot the sensor.</string>
+    <string name="txt_nolightsensor_sorry">Sorry, light sensor can\'t be found on this device. This application is not functional without the sensor.</string>
+    
 </resources>
+ 
