@@ -263,12 +263,23 @@ public class MainActivity extends Activity {
 		
 		switch(item.getItemId())
 		{
+		case R.id.miPreferences:
+			try
+			{
+				Intent prefsIntent = new Intent(this, PrefsActivity.class);
+				startActivity(prefsIntent);
+		        Log.i(Globals.TAG, "Preferences activity started");
+			} catch(Exception e)
+			{
+				Log.e(Globals.TAG, e.getMessage(), e);
+			}
+			break;
 		case R.id.miCredits:
 			try
 			{
 				Intent creditsIntent = new Intent("biz.gyrus.yaab.CREDITS");
 		        startActivity(creditsIntent);
-		        Log.i(Globals.TAG, "Preferences activity started");
+		        Log.i(Globals.TAG, "Credits activity started");
 			} catch(Exception e)
 			{
 				Log.e(Globals.TAG, e.getMessage(), e);

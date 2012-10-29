@@ -6,10 +6,12 @@
 
 package biz.gyrus.yaab;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import biz.gyrus.yaab.BrightnessController.ServiceStatus;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -24,6 +26,7 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.support.v4.app.NotificationCompat;
@@ -32,24 +35,30 @@ import android.view.WindowManager;
 
 public class LightMonitorService extends Service {
 
-	public static final int DEFAULT_CHECK_PERIOD = 1000; // each second
-	public static final int DEFAULT_CYCLES = 5;
-	public static final float HIST_DELTA_THRESHOLD = 0.08f;
+	public static final float HIST_DELTA_THRESHOLD = 0.02f;
+	
+	private static class Reading
+	{
+		public Reading(float f, long t) { fVal = f; lTime = t; }
+		
+		public float fVal = 0f;
+		public long lTime = 0L;
+	}
 
 	private boolean _bActive = false;
-	private int _iCycleCounter = 0;
 	private Handler _h = new Handler();
 	private SensorManager _sensorManager = null;
 	private Sensor _lightSensor = null;
 
-	private float _currentRunningReading = -2000f;
-	private ArrayList<Float> _readings = null;
-	private float _lastReading = -40000f;
+	private float _currentRunningReading = 150f;
+	private List<Reading> _readings = new LinkedList<Reading>();
 
 	private ActivatorView _av = null;
 	private WindowManager.LayoutParams _avLayoutParams = null;
 
 	private static LightMonitorService _instance = null;
+	
+	private PendingIntent _piSelf = null;
 
 	public static LightMonitorService getInstance() {
 		return _instance;
@@ -68,7 +77,10 @@ public class LightMonitorService extends Service {
 
 				cancelTimer();
 
-				showNotificationIcon(false);
+				AppSettings as = new AppSettings(LightMonitorService.this);
+				if(!as.getPersistAlwaysNotification())
+					showNotificationIcon(false);
+				startAlertKeepalive(false);
 			}
 		}
 	};
@@ -86,6 +98,7 @@ public class LightMonitorService extends Service {
 
 				AppSettings as = new AppSettings(LightMonitorService.this);
 				showNotificationIcon(as.getPersistNotification());
+				startAlertKeepalive(as.getAlertKeepalive());
 			}
 
 		}
@@ -95,47 +108,50 @@ public class LightMonitorService extends Service {
 
 		@Override
 		public void run() {
-			Log.i(Globals.TAG, String.format("Timer hit, count %d.", _iCycleCounter));
-			if (_readings != null) {
-				float currentReading = 0f;
-				for (float f : _readings) {
-					currentReading += f;
-					_lastReading = f; // wtf? why don't you just read last
-										// element from the collection
-										// directly???
+			long now = System.currentTimeMillis();
+			Log.d(Globals.TAG, String.format("Timer hit, millis: %d.", now));
+
+			// cleaning obsolete values which are out of measuring frame
+			while(_readings.size() > 0 && _readings.get(0).lTime < now - Globals.MEASURING_FRAME)
+				_readings.remove(0);
+			
+			if (_readings.size() > 0) {
+				
+				float sum = 0;
+				long measurePoint = now;
+				
+				for (int i = _readings.size() - 1; i >= 0; i--) 
+				{
+					Reading r = _readings.get(i);
+					
+					sum += r.fVal * (measurePoint - r.lTime);
+					measurePoint = r.lTime;
 				}
-				currentReading /= _readings.size();
+				
+				sum += _currentRunningReading * (measurePoint - (now - Globals.MEASURING_FRAME));
+				
+				float currentReading = sum / Globals.MEASURING_FRAME;
 
-				_readings = null;
+				Log.d(Globals.TAG, "AVG reading: " + currentReading);
 
-				Log.i(Globals.TAG, "AVG reading: " + currentReading);
+				float currentReadingBrightness = BrightnessController.get().getBrightnessFromReading(currentReading);
+				float currentRunningBrightness = BrightnessController.get().getBrightnessFromReading(_currentRunningReading);
 
-				float currentReadingBrightness = BrightnessController.get()
-						.getBrightnessFromReading(currentReading);
-				float currentRunningBrightness = BrightnessController.get()
-						.getBrightnessFromReading(_currentRunningReading);
-
-				Log.i(Globals.TAG, "ReadingBrightness: " + currentReadingBrightness);
-				Log.i(Globals.TAG, "RunningBrightness: " + currentRunningBrightness);
+				Log.d(Globals.TAG, "ReadingBrightness: " + currentReadingBrightness);
+				Log.d(Globals.TAG, "RunningBrightness: " + currentRunningBrightness);
 
 				if (Math.abs(currentReadingBrightness
 						- currentRunningBrightness) > HIST_DELTA_THRESHOLD) {
-					Log.i(Globals.TAG, "Threshold defeated!");
+					Log.d(Globals.TAG, "Threshold defeated!");
 					_currentRunningReading = currentReading;
 					applyRunningReading();
 				}
 			} else {
-				if (_currentRunningReading != _lastReading) {
-					_currentRunningReading = _lastReading;
-					applyRunningReading();
-				}
+				_bActive = false;
 			}
 
-			_iCycleCounter++;
-			if (_iCycleCounter < DEFAULT_CYCLES)
-				_h.postDelayed(_timerHandler, DEFAULT_CHECK_PERIOD);
-			else
-				_bActive = false;
+			if(_bActive)
+				_h.postDelayed(_timerHandler, Globals.TIMER_PERIOD);
 		}
 	};
 
@@ -143,7 +159,7 @@ public class LightMonitorService extends Service {
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			Log.i(Globals.TAG, "Accuracy changed called!");
+			Log.d(Globals.TAG, "Accuracy changed called!");
 		}
 
 		@Override
@@ -151,12 +167,10 @@ public class LightMonitorService extends Service {
 
 			if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
 				float currentReading = event.values[0];
-				Log.i(Globals.TAG,
+				Log.d(Globals.TAG,
 						String.format("Float brightness: %f", currentReading));
-
-				if (_readings == null)
-					_readings = new ArrayList<Float>();
-				_readings.add(currentReading);
+				
+				_readings.add(new Reading(currentReading, System.currentTimeMillis()));
 
 				kickTimer();
 			}
@@ -182,13 +196,15 @@ public class LightMonitorService extends Service {
 			_sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			_lightSensor = _sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
+			_piSelf = PendingIntent.getService(this, 0, new Intent(this, this.getClass()), PendingIntent.FLAG_UPDATE_CURRENT);
+
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			if (pm.isScreenOn()) {
-				_sensorManager.registerListener(_listener, _lightSensor,
-						SensorManager.SENSOR_DELAY_FASTEST);
+				_sensorManager.registerListener(_listener, _lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
 				showNotificationIcon(as.getPersistNotification());
 
+				startAlertKeepalive(as.getAlertKeepalive());
 				Log.i(Globals.TAG, "Listener registered");
 			} else
 				Log.i(Globals.TAG, "Screen is off, skip listener registration.");
@@ -206,13 +222,11 @@ public class LightMonitorService extends Service {
 			WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 			wm.addView(_av, _avLayoutParams);
 
-			registerReceiver(_brScrOFF, new IntentFilter(
-					Intent.ACTION_SCREEN_OFF));
-			registerReceiver(_brScrON,
-					new IntentFilter(Intent.ACTION_SCREEN_ON));
+			registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+			registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
 
-			BrightnessController.get().updateServiceStatus(
-					ServiceStatus.Running);
+			BrightnessController.get().updateServiceStatus(ServiceStatus.Running);
+			
 		}
 
 		Log.i(Globals.TAG, "Service onCreate() finished");
@@ -283,10 +297,9 @@ public class LightMonitorService extends Service {
 		if (_bActive)
 			return;
 
-		_iCycleCounter = 0;
 		_bActive = true;
 
-		_h.postDelayed(_timerHandler, DEFAULT_CHECK_PERIOD);
+		_h.postDelayed(_timerHandler, Globals.TIMER_PERIOD);
 		Log.i(Globals.TAG, "Timer hit initiated!");
 	}
 
@@ -294,7 +307,6 @@ public class LightMonitorService extends Service {
 		Log.i(Globals.TAG, "cancelTimer called");
 		_h.removeCallbacks(_timerHandler);
 		_bActive = false;
-		_readings = null;
 	}
 
 	private void setBrightness(float brightness) {
@@ -324,6 +336,8 @@ public class LightMonitorService extends Service {
 	}
 
 	public void showNotificationIcon(boolean bShow) {
+		Log.d(Globals.TAG, String.format("showNotificationIcon entering, bShow = %b", bShow));
+		
 		if (bShow) {
 			Intent ni = new Intent(this, MainActivity.class);
 			PendingIntent pi = PendingIntent.getActivity(this, 0, ni,
@@ -342,5 +356,25 @@ public class LightMonitorService extends Service {
 			startForeground(Globals.NOTIFICATION_ID, nb.getNotification());
 		} else
 			stopForeground(true);
+		
+		Log.d(Globals.TAG, "showNotificationIcon leave");
+	}
+	
+	public void startAlertKeepalive(boolean bStart)
+	{
+		Log.d(Globals.TAG, String.format("startAlertKeepalive entering, bStart = %b",  bStart));
+		
+		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		
+		if(bStart)
+		{
+			am.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, 5 * 1000 /* each five seconds */, _piSelf);
+		}
+		else
+		{
+			am.cancel(_piSelf);
+		}
+		
+		Log.d(Globals.TAG, "startAlertKeepalive leave");
 	}
 }

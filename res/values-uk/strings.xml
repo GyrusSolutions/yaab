@@ -23,4 +23,12 @@
     <string name="activity_credits_txt_main">Ця програма розроблена та підтримується командою <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nКод програми та поточні білди доступні на <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nПрограмне забезпечення надається \"як є\", без гарантій будь-якого виду, виражених або домислених, у тому числі, але не обмежуючись гарантіями комерційної вигоди, придатності для конкретної мети і можливих помилок. Ні в якому разі автори або власники авторських прав не повинні нести відповідальність за будь-які претензії, збитки або іншу відповідальність за будь-які дії які виникають у зв\'язку цім з програмним забезпеченням або застосуванням його або інших операцій з ним.</string>
     <string name="activity_credits_btn_close">Close</string>
     
+    <string name="preferences">Налаштування</string>
+    <string name="cb_alwaysfg_text">Завжди на першому плані</string>
+    <string name="summary_autostart_preference">Запускати сервіс автоматично, коли пристрій запускається</string>
+	<string name="summary_fgservice_preference">Відображати іконку в області нотифікацій, якщо сервіс активний</string>
+	<string name="summary_always_fgsrv_preference">Не переходити в фоновий режим навіть коли екран вимкнено</string>
+	<string name="alert_keepalive_title">Використовувати системний будильник</string>
+	<string name="alert_keepalive_summary">Дає сервісу ще один шанс вижити при нестачі пам\'яті. ЕКСПЕРИМЕНТАЛЬНО.</string>
+        
 </resources>

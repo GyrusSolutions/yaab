@@ -23,4 +23,12 @@
     <string name="activity_credits_txt_main">This application developed and supported by <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nSource code and development builds are available at <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="activity_credits_btn_close">לסגור</string>
     
+    <string name="preferences">העדפות</string>
+    <string name="cb_alwaysfg_text">שמור תמיד בחזית</string>
+    <string name="summary_autostart_preference">התחל באופן אוטומטי כאשר מגפי המכשיר את השירות</string>
+	<string name="summary_fgservice_preference">הצגת סמל הודעה כאשר מדוברים בשירות פעיל</string>
+	<string name="summary_always_fgsrv_preference">אל תפעיל את השירות למצב רקע גם כאשר המסך כבוי</string>
+	<string name="alert_keepalive_title">השתמש במערכת התראה</string>
+	<string name="alert_keepalive_summary">סוג של מתקן משך חיים עבור השירות. ניסיוני.</string>
+        
 </resources>

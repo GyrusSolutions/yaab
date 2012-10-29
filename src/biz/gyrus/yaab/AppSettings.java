@@ -1,9 +1,11 @@
 package biz.gyrus.yaab;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
@@ -12,10 +14,13 @@ import android.util.Log;
 public class AppSettings {
 	
 	private static final String _prefsName = "thesettings";
+	private static final String _saverAppVerName = "savedByAppVersion";
+
 	private static final String _autostartName = "autoStartOnDeviceBoot";
 	private static final String _adjshiftName = "adjShift";
 	private static final String _persistNotifName = "persistNotification";
-	private static final String _saverAppVerName = "savedByAppVersion";
+	private static final String _persistNotifAlwaysName = "persistNotificationAlways";
+	private static final String _alertKeepaliveName = "alertKeepalive";
 	
 	private Context _ctx = null;
 	private int _verNum = 1;
@@ -34,7 +39,7 @@ public class AppSettings {
 		} 
 	}
 	
-	private SharedPreferences getSP()
+	protected SharedPreferences getSP()
 	{
 		SharedPreferences sp = _ctx.getSharedPreferences(_prefsName, 0);
 		if(sp.getInt(_saverAppVerName, 1) < _verNum)
@@ -44,25 +49,40 @@ public class AppSettings {
 		return sp;
 	}
 	
-	private void upgradePrefs(SharedPreferences sp)
+	protected void upgradePrefs(SharedPreferences sp)
 	{
 		Log.d(Globals.TAG, "upgradePrefs starting.");
-		if(sp.getInt(_saverAppVerName, 1) == 1)
+		int iPrevVer = sp.getInt(_saverAppVerName, 1); 
+		SharedPreferences.Editor e = sp.edit();
+		
+		if(iPrevVer == 1)
 		{
-			SharedPreferences.Editor e = sp.edit();
-			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 50) - Globals.ADJUSTMENT_RANGE_INT);
-			commitAndLog(e);
+			e.putInt(_adjshiftName, sp.getInt(_adjshiftName, 50) - Globals.ADJUSTMENT_RANGE_INT/2);
 		}
+		
+		if(iPrevVer < 7)
+		{
+			updateBootReceiverState(sp.getBoolean(_autostartName, false));
+		}
+		
+		commitAndLog(e);
 		Log.d(Globals.TAG, "upgradePrefs done.");
 	}
 	
-	private void commitAndLog(SharedPreferences.Editor e)
+	protected void commitAndLog(SharedPreferences.Editor e)
 	{
 		e.putInt(_saverAppVerName, _verNum);
 		if(!e.commit())
 		{
 			Log.e(Globals.TAG, "Failed to save settings.");
 		}
+	}
+	
+	protected void updateBootReceiverState(boolean enabled)
+	{
+		ComponentName cn = new ComponentName(_ctx, DeviceBootReceiver.class);
+		PackageManager pm = _ctx.getPackageManager();
+		pm.setComponentEnabledSetting(cn, enabled?PackageManager.COMPONENT_ENABLED_STATE_ENABLED:PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	public Boolean getAutostart()
@@ -77,6 +97,9 @@ public class AppSettings {
 		e.putBoolean(_autostartName, bAutoStart);
 		
 		commitAndLog(e);
+		
+		// enable/disable the receiver also
+		updateBootReceiverState(bAutoStart);
 	}
 	
 	public int getAdjshift()
@@ -106,4 +129,33 @@ public class AppSettings {
 		
 		commitAndLog(e);
 	}
+	
+	public Boolean getPersistAlwaysNotification()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getBoolean(_persistNotifAlwaysName, false);
+	}
+	public void setPersistAlwaysNotification(boolean bPersistAlways)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putBoolean(_persistNotifAlwaysName, bPersistAlways);
+		
+		commitAndLog(e);
+	}
+	
+	public Boolean getAlertKeepalive()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getBoolean(_alertKeepaliveName, false);
+	}
+	public void setAlertKeepalive(boolean bAlertKeepalive)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putBoolean(_alertKeepaliveName, bAlertKeepalive);
+		
+		commitAndLog(e);
+	}
+	
 }

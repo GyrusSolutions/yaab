@@ -23,5 +23,13 @@
     <string name="activity_credits_txt_main">This application developed and supported by <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nSource code and development builds are available at <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="activity_credits_btn_close">Close</string>
     
+    <string name="preferences">Preferences</string>
+    <string name="cb_alwaysfg_text">Always keep in foreground</string>
+    <string name="summary_autostart_preference">Start the service automatically when the device boots up</string>
+	<string name="summary_fgservice_preference">Display notification icon when the service is active</string>
+	<string name="summary_always_fgsrv_preference">Don\'t switch the service to background mode even when the screen is OFF</string>
+	<string name="alert_keepalive_title">Use system alarm</string>
+	<string name="alert_keepalive_summary">A kind of keepalive facility for the service. EXPERIMENTAL.</string>
+        
 </resources>
  

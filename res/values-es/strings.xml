@@ -23,4 +23,12 @@
     <string name="activity_credits_txt_main">Esta aplicación desarrollada con el apoyo de <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nEl código fuente y las versiones en desarrollo se encuentran disponibles en <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nEL SOFTWARE SE ENTREGA \"TAL CUAL\", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO SIN LIMITARSE A GARANTÍAS DE MERCANTIBILIDAD, CAPACIDAD DE HACER Y DE NO INFRACCIÓN DE COPYRIGHT. EN NINGÚN CASO LOS AUTORES O TITULARES DEL COPYRIGHT SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UN LITIGIO, AGRAVIO O DE OTRO MODO, DERIVADAS DE, OCASIONADAS POR CULPA DE O EN CONEXION CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.</string>
     <string name="activity_credits_btn_close">Cerrar</string>
     
+    <string name="preferences">Configuración</string>
+    <string name="cb_alwaysfg_text">Tenga siempre en primer plano</string>
+    <string name="summary_autostart_preference">Inicie el servicio automáticamente cuando se inicia el dispositivo hasta</string>
+	<string name="summary_fgservice_preference">Mostrar icono de notificación cuando el servicio está activo</string>
+	<string name="summary_always_fgsrv_preference">No encienda el servicio a modo de fondo, incluso cuando la pantalla está apagada</string>
+	<string name="alert_keepalive_title">Utilice el sistema de alarma</string>
+	<string name="alert_keepalive_summary">Una suerte de mantener con vida las instalaciones para el servicio. EXPERIMENTAL.</string>
+    
 </resources>

@@ -23,4 +23,12 @@
     <string name="activity_credits_txt_main">This application developed and supported by <a href="http://www.gyrus.biz/">Gyrus Solutions</a>.\nSource code and development builds are available at <a href="https://bitbucket.org/gyrussolutions/yaab/">BitBucket</a>.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="activity_credits_btn_close">关闭</string>
     
+    <string name="preferences">首选项</string>
+    <string name="cb_alwaysfg_text">始终保持在前景</string>
+    <string name="summary_autostart_preference">启动服务自动时启动设备</string>
+	<string name="summary_fgservice_preference">服务处于活动状态时显示通知图标</string>
+	<string name="summary_always_fgsrv_preference">即使屏幕关闭时，不要将服务切换到背景模式</string>
+	<string name="alert_keepalive_title">使用系统报警</string>
+	<string name="alert_keepalive_summary">保持一种活着的服务设施。实验性的。</string>
+        
 </resources>

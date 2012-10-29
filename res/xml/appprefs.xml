@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <CheckBoxPreference 
+        android:persistent="false" 
+        android:key="autostart_preference" 
+        android:title="@string/cb_autostart_text" 
+        android:summary="@string/summary_autostart_preference"/>
+    
+    <CheckBoxPreference 
+        android:persistent="false" 
+        android:key="fgservice_preference" 
+        android:title="@string/cb_notificon_text" 
+        android:summary="@string/summary_fgservice_preference"/>
+    
+    <CheckBoxPreference 
+        android:persistent="false" 
+        android:key="always_fgsrv_preference" 
+        android:title="@string/cb_alwaysfg_text" 
+        android:summary="@string/summary_always_fgsrv_preference"
+        android:dependency="fgservice_preference"
+        />
+    
+    <CheckBoxPreference 
+        android:persistent="false"
+        android:key="alert_keepalive_preference"
+        android:title="@string/alert_keepalive_title"
+        android:summary="@string/alert_keepalive_summary"
+        />
+    
+    
+</PreferenceScreen>
