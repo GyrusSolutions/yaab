@@ -4,7 +4,7 @@
     <string name="title_activity_main">Otro Auto Brillo</string>
     <string name="btn_start_text">Iniciar</string>
     <string name="btn_stop_text">Parar</string>
-    <string name="cb_autostart_text">Iniciar en dispositivo de arranque</string>
+    <string name="cb_autostart_text">Iniciar en dispositivo</string>
     <string name="cb_notificon_text">Notificación persistente</string>
     <string name="status_running">Funcionamiento</string>
     <string name="status_stopped">Parado</string>
@@ -39,7 +39,7 @@
     <string name="txt_min">Límite mínimo brillo</string>
     <string name="txt_max">Límite máximo brillo</string>    
 	<string name="night_reading_caption">Modo Nocturno</string>
-	<string name="cb_autonight_text">Modo Nocturno automático</string>
+	<string name="cb_autonight_text">Nocturno automático</string>
 	<string name="txt_night_threshold">Umbral de Modo Nocturno</string>
 	<string name="txt_night_brightness">Brillo de Modo Nocturno</string>
 	<string name="btn_night_test">Prueba</string>
