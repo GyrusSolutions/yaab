@@ -31,4 +31,24 @@
 	<string name="alert_keepalive_title">Использовать системный будильник</string>
 	<string name="alert_keepalive_summary">Дает сервису лишний шанс выжить при недостатке памяти. ЭКСПЕРИМЕНТАЛЬНО.</string>
         
+	<string name="ranges_title">Диапазоны</string>
+	<string name="txt_night">Ночь</string>
+	<string name="txt_normal">Норм.</string>
+	<string name="ranges_summary">Мин., Макс., пороговые значения, яркость ночью</string>
+	<string name="brightness_range_caption">Диапазон яркости</string>
+    <string name="txt_min">Минимум</string>
+    <string name="txt_max">Максимум</string>    
+	<string name="night_reading_caption">Ночной режим</string>
+	<string name="cb_autonight_text">Авто Ночь</string>
+	<string name="txt_night_threshold">Порог ночного режима</string>
+	<string name="txt_night_brightness">Яркость в ночном режиме</string>
+	<string name="btn_night_test">Тест</string>
+	<string name="txt_sensor_reading">Последнее значение датчика:</string>
+	<string name="txt_threshold_value">Текущий предел:</string>
+	<string name="txt_none">нет</string>
+	<string name="brightness_status_off">Выключено</string>
+	<string name="brightness_status_auto">Авто</string>
+	<string name="brightness_status_manualnight">Ночь (ручная)</string>
+	<string name="brightness_status_autonight">Ночь</string>
+	<string name="txt_not_auto_note">Пожалуйста, обратите внимание, что сервис сейчас не находится в режиме Авто, вы не сможете немедленно увидеть эффект от изменения некоторых настроек.</string>
 </resources>

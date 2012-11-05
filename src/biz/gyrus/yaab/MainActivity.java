@@ -9,6 +9,7 @@ package biz.gyrus.yaab;
 import java.util.Observable;
 import java.util.Observer;
 
+import biz.gyrus.yaab.BrightnessController.BrightnessStatus;
 import biz.gyrus.yaab.BrightnessController.ServiceStatus;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,21 +35,38 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
-	private Button _btnStart = null;
-	private Button _btnStop = null;
+	private Button _btnStartStop = null;
 	private CheckBox _cbAutoStart = null;
-	private CheckBox _cbPersistNotification = null;
 	private TextView _txtStatus = null;
 	private SeekBar _sbAdjLevel = null;
 	private TextView _lblManualAdj = null;
 	private TextView _lblBtmComment = null;
 	private ProgressBar _pbCurrent = null;
+	private Button _btnNight = null;
+	private CheckBox _cbAutoNight = null;
+	private Handler _h = new Handler();
+	private SeekBar _sbNightBrightness = null;
 	
 	private Observer _oServiceStatus = new Observer() {
 		
 		@Override
 		public void update(Observable observable, Object data) {
 			
+			runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					updateControls();
+				}
+			});
+		}
+	};
+	
+	private Observer _oBrightnessStatus = new Observer() {
+		
+		@Override
+		public void update(Observable observable, Object data) {
+
 			runOnUiThread(new Runnable() {
 				
 				@Override
@@ -83,15 +102,16 @@ public class MainActivity extends Activity {
         setTitle(R.string.title_activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
-        _btnStart = (Button) findViewById(R.id.btnOn);
-        _btnStop = (Button) findViewById(R.id.btnOff);
+        _btnStartStop = (Button) findViewById(R.id.btnOnOff);
         _cbAutoStart = (CheckBox) findViewById(R.id.cbAutostart);
-        _cbPersistNotification = (CheckBox) findViewById(R.id.cbNotifIcon);
         _txtStatus = (TextView) findViewById(R.id.txtStatus);
         _lblManualAdj = (TextView) findViewById(R.id.lblManualAdjustment);
         _lblBtmComment = (TextView) findViewById(R.id.lblHowToUse);
         _sbAdjLevel = (SeekBar) findViewById(R.id.sbAdjLevel);
-        _pbCurrent= (ProgressBar) findViewById(R.id.pbCurrent);
+        _pbCurrent = (ProgressBar) findViewById(R.id.pbCurrent);
+        _btnNight = (Button) findViewById(R.id.btnNight);
+        _cbAutoNight = (CheckBox) findViewById(R.id.cbAutonight);
+        _sbNightBrightness = (SeekBar) findViewById(R.id.sbNightBrightness);
         
         _pbCurrent.setMax(Globals.MAX_BRIGHTNESS_INT);
         
@@ -114,28 +134,47 @@ public class MainActivity extends Activity {
 			}
 		});
         
-        _btnStart.setOnClickListener(new OnClickListener() {
+        _btnStartStop.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Log.i(Globals.TAG, "Starting service...");
-				saveManualAdjustment();
-				ComponentName cn = startService(new Intent(MainActivity.this, LightMonitorService.class));
-				if(cn != null)
+				if(BrightnessController.get().getServiceStatus() != ServiceStatus.Running)
 				{
-					Log.i(Globals.TAG, String.format("Service Component name: %s", cn.toShortString()));
+					Log.i(Globals.TAG, "Starting service...");
+					saveManualAdjustment();
+					ComponentName cn = startService(new Intent(MainActivity.this, LightMonitorService.class));
+					if(cn != null)
+					{
+						Log.i(Globals.TAG, String.format("Service Component name: %s", cn.toShortString()));
+					}
+					else
+						Log.i(Globals.TAG, "Can't start it!");
 				}
 				else
-					Log.i(Globals.TAG, "Can't start it!");
+				{
+					Log.i(Globals.TAG, "Stopping service...");
+					stopService(new Intent(MainActivity.this, LightMonitorService.class));
+				}
 			}
         });
         
-        _btnStop.setOnClickListener(new OnClickListener() {
+        _btnNight.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Log.i(Globals.TAG, "Stopping service...");
-				stopService(new Intent(MainActivity.this, LightMonitorService.class));
+				BrightnessController bc = BrightnessController.get();
+				
+				bc.setForceNight(!bc.isForceNight());
+				bc.updateRunningBrightness();
+				
+				_h.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						
+						updateControls();
+					}
+				});
 			}
 		});
         
@@ -149,20 +188,37 @@ public class MainActivity extends Activity {
 			}
 		});
         
-        _cbPersistNotification.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        _cbAutoNight.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				Log.i(Globals.TAG, String.format("Saving persist notification: %b", isChecked));
+				Log.i(Globals.TAG, String.format("Saving autonight: %b", isChecked));
 				AppSettings s = new AppSettings(MainActivity.this);
-				s.setPersistNotification(isChecked);
-				
-				LightMonitorService lms = LightMonitorService.getInstance();
-				if(lms != null)
-					lms.showNotificationIcon(isChecked && BrightnessController.get().getServiceStatus() == ServiceStatus.Running);
+				s.setAllowAutoNight(isChecked);
+				BrightnessController.get().setAutoNight(isChecked);
+				BrightnessController.get().updateRunningBrightness();
 			}
 		});
         
+		_sbNightBrightness.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {	}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if(fromUser)
+				{
+					BrightnessController bc = BrightnessController.get();
+					bc.setRunningDimAmount(bc.getDimAmount(progress + Globals.MIN_NM_BRIGHTNESS));
+					bc.updateRunningBrightness();
+				}
+			}
+		});
+		
 	}
 	
 	protected void saveManualAdjustment()
@@ -177,8 +233,12 @@ public class MainActivity extends Activity {
 		
 		BrightnessController.get().removeServiceStatusObserver(_oServiceStatus);
         BrightnessController.get().removeRunningBrightnessObserver(_oRunningBrightness);
+        BrightnessController.get().removeBrightnessStatusObserver(_oBrightnessStatus);
 
 		saveManualAdjustment();
+		
+		AppSettings as = new AppSettings(this);
+		as.setNMBrightness(_sbNightBrightness.getProgress() + Globals.MIN_NM_BRIGHTNESS);
 	}
 	
 	@Override
@@ -187,6 +247,7 @@ public class MainActivity extends Activity {
 		
 		AppSettings s = new AppSettings(this);
         _sbAdjLevel.setProgress(_sbAdjLevel.getMax()/2 + s.getAdjshift());
+		_sbNightBrightness.setProgress(s.getNMBrightness() - Globals.MIN_NM_BRIGHTNESS);
         BrightnessController.get().setManualAdjustment(s.getAdjshift());
 
         if(!BrightnessController.get().isLightSensorPresent(this))
@@ -194,14 +255,13 @@ public class MainActivity extends Activity {
 			_txtStatus.setText(R.string.status_nosensor);
 			_txtStatus.setTextColor(getResources().getColor(R.color.StatusError));
 			
-			_btnStart.setEnabled(false);
-			_btnStop.setEnabled(false);
+			_btnStartStop.setEnabled(false);
+			_btnNight.setEnabled(false);
 			
 			_cbAutoStart.setEnabled(false);
 			_cbAutoStart.setChecked(false);
-			
-			_cbPersistNotification.setEnabled(false);
-			_cbPersistNotification.setChecked(false);
+			_cbAutoNight.setEnabled(false);
+			_cbAutoNight.setChecked(false);
 			
 			_sbAdjLevel.setEnabled(false);
 			
@@ -213,10 +273,11 @@ public class MainActivity extends Activity {
 		{
 			_cbAutoStart.setEnabled(true);
 			_cbAutoStart.setChecked(s.getAutostart());
-			_cbPersistNotification.setEnabled(true);
-			_cbPersistNotification.setChecked(s.getPersistNotification());
 			_lblBtmComment.setText(R.string.txt_howto_use);
 
+			_cbAutoNight.setEnabled(true);
+			_cbAutoNight.setChecked(s.getAllowAutoNight());
+			
 			_pbCurrent.setVisibility(View.VISIBLE);
 			
 			updateControls();
@@ -224,27 +285,62 @@ public class MainActivity extends Activity {
         
         BrightnessController.get().addServiceStatusObserver(_oServiceStatus);
         BrightnessController.get().addRunningBrightnessObserver(_oRunningBrightness);
+        BrightnessController.get().addBrightnessStatusObserver(_oBrightnessStatus);
 	}
 	
 	protected void updateControls()
 	{
 		final ServiceStatus ssCurrent = BrightnessController.get().getServiceStatus();
 		
-		_btnStart.setEnabled(ssCurrent != ServiceStatus.Running);
-		_btnStop.setEnabled(ssCurrent != ServiceStatus.Stopped);
+		_btnStartStop.setEnabled(true);
+		_btnStartStop.setText((ssCurrent != ServiceStatus.Running)?R.string.btn_start_text:R.string.btn_stop_text);
 		_sbAdjLevel.setEnabled(ssCurrent == ServiceStatus.Running);
 		
 		if(ssCurrent == ServiceStatus.Running)
 		{
-			_txtStatus.setText(R.string.status_running);
+			switch(BrightnessController.get().getBrightnessStatus())
+			{
+			case Auto:
+				_txtStatus.setText(R.string.brightness_status_auto);
+				break;
+			case AutoNight:
+				_txtStatus.setText(R.string.brightness_status_autonight);
+				break;
+			case ForceNight:
+				_txtStatus.setText(R.string.brightness_status_manualnight);
+				break;
+			default:
+				_txtStatus.setText(R.string.brightness_status_off);
+				break;
+			}
 			_txtStatus.setTextColor(getResources().getColor(R.color.StatusHealthy));
 			_pbCurrent.setProgress(BrightnessController.get().getRunningBrightness());
+			_btnNight.setEnabled(true);
+			_btnNight.setText(BrightnessController.get().isForceNight()?R.string.txt_normal:R.string.txt_night);
+			
+			if(BrightnessController.get().getBrightnessStatus() == BrightnessStatus.ForceNight)
+			{
+				_lblManualAdj.setText(R.string.txt_night_brightness);
+				_sbAdjLevel.setVisibility(View.GONE);
+				_sbNightBrightness.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				_lblManualAdj.setText(R.string.manual_adjust);
+				_sbAdjLevel.setVisibility(View.VISIBLE);
+				_sbNightBrightness.setVisibility(View.GONE);
+			}
 		}
 		if(ssCurrent == ServiceStatus.Stopped)
 		{
 			_txtStatus.setText(R.string.status_stopped);
 			_txtStatus.setTextColor(_lblManualAdj.getTextColors().getDefaultColor());
 			_pbCurrent.setProgress(0);
+			_btnNight.setEnabled(false);
+			
+			_lblManualAdj.setText(R.string.manual_adjust);
+			_sbAdjLevel.setVisibility(View.VISIBLE);
+			_sbNightBrightness.setVisibility(View.GONE);
 		}
 		
 	}

@@ -15,7 +15,7 @@
     
     <string name="manual_adjust">手动调整</string>
 
-    <string name="txt_howto_use">如何使用：点击“开始”，“运行”等待状态的变化。这就是一切。使用“手动调整”滑块以更改亮度平均水平，如果需要的话。\n“坚持的通知”，可能是有用的设备上运行Android3.x和更高版本上512MB RAM。它有助于服务生存当系统正在通缉资源。</string>
+    <string name="txt_howto_use">如何使用：点击“开始”，“运行”等待状态的变化。这就是一切。使用“手动调整”滑块以更改亮度平均水平，如果需要的话。\n\n自动夜间模式只可能工作如果设备的光线感应器能阅读低值。</string>
     <string name="txt_nolightsensor_sorry">很抱歉，光线感应器不能在此设备上。该应用程序不是功能而不传感器。</string>
 
     <string name="title_activity_credits">又一自动亮度</string>
@@ -31,4 +31,24 @@
 	<string name="alert_keepalive_title">使用系统报警</string>
 	<string name="alert_keepalive_summary">保持一种活着的服务设施。实验性的。</string>
         
+	<string name="ranges_title">范围</string>
+	<string name="txt_night">夜间</string>
+	<string name="txt_normal">正常</string>
+	<string name="ranges_summary">最小值，最大值，阈值，夜间模式，亮度</string>
+	<string name="brightness_range_caption">亮度范围</string>
+    <string name="txt_min">最小亮度限制</string>
+    <string name="txt_max">最大亮度限制</string>    
+	<string name="night_reading_caption">夜读</string>
+	<string name="cb_autonight_text">自动夜间模式</string>
+	<string name="txt_night_threshold">夜间模式阈值</string>
+	<string name="txt_night_brightness">夜间模式亮度</string>
+	<string name="btn_night_test">考验</string>
+	<string name="txt_sensor_reading">最近光线感应器值:</string>
+	<string name="txt_threshold_value">当前阈值:</string>
+	<string name="txt_none">全无</string>
+	<string name="brightness_status_off">关</string>
+	<string name="brightness_status_auto">自动</string>
+	<string name="brightness_status_manualnight">夜间（手动）</string>
+	<string name="brightness_status_autonight">夜间</string>
+	<string name="txt_not_auto_note">请注意，因为该服务不是在自动模式下，如果您变其中的一些设置，您可能无发现立竿见影的效果。</string>
 </resources>

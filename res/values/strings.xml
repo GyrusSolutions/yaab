@@ -15,7 +15,7 @@
     
     <string name="manual_adjust">Manual adjustment</string>
 
-    <string name="txt_howto_use">HOW TO USE: Tap \"Start\", wait until status change to \"Running\". That is all. Use \"Manual adjustment\" slider to change average level of brightness if needed.\n"Persist notification" may be useful on devices running Android 3.x and newer on 512MB RAM. It helps the service to survive while the system is hunting for resources.</string>
+    <string name="txt_howto_use">HOW TO USE: Tap \"Start\", wait until status change to \"Running\". That is all. Use \"Manual adjustment\" slider to change average level of brightness if needed.\n\nAutomatic night mode will work only if device\'s light sensor is capable of reading low values.</string>
     <string name="txt_nolightsensor_sorry">Sorry, light sensor can\'t be found on this device. This application is not functional without the sensor.</string>
 
     <string name="title_activity_credits">Yet Another Auto Brightness</string>
@@ -30,6 +30,26 @@
 	<string name="summary_always_fgsrv_preference">Don\'t switch the service to background mode even when the screen is OFF</string>
 	<string name="alert_keepalive_title">Use system alarm</string>
 	<string name="alert_keepalive_summary">A kind of keepalive facility for the service. EXPERIMENTAL.</string>
-        
+	
+	<string name="ranges_title">Ranges</string>
+	<string name="txt_night">Night</string>
+	<string name="txt_normal">Normal</string>
+	<string name="ranges_summary">Min, Max, Thresholds, Night mode brightness</string>
+	<string name="brightness_range_caption">Brightness range</string>
+    <string name="txt_min">Min brightness limit</string>
+    <string name="txt_max">Max brightness limit</string>    
+	<string name="night_reading_caption">Night reading</string>
+	<string name="cb_autonight_text">Auto Night mode</string>
+	<string name="txt_night_threshold">Night Mode threshold</string>
+	<string name="txt_night_brightness">Night Mode brightness</string>
+	<string name="btn_night_test">Test</string>
+	<string name="txt_sensor_reading">Most recent light sensor reading:</string>
+	<string name="txt_threshold_value">Current threshold value:</string>
+	<string name="txt_none">none</string>
+	<string name="brightness_status_off">Off</string>
+	<string name="brightness_status_auto">Auto</string>
+	<string name="brightness_status_manualnight">Night (manual)</string>
+	<string name="brightness_status_autonight">Night</string>
+	<string name="txt_not_auto_note">Please note that since the service is not in auto mode now, you may not be able to see immediate effect of changing some of these settings.</string>
 </resources>
  

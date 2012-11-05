@@ -1,11 +1,15 @@
 package biz.gyrus.yaab;
 
 import biz.gyrus.yaab.BrightnessController.ServiceStatus;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
+import android.util.Log;
 
 public class PrefsActivity extends PreferenceActivity {
 
@@ -13,11 +17,13 @@ public class PrefsActivity extends PreferenceActivity {
 	private final static String P_FOREGROUNDSERVICE = "fgservice_preference";
 	private final static String P_ALWAYSFGSERVICE = "always_fgsrv_preference";
 	private final static String P_ALERTKEEPALIVE = "alert_keepalive_preference";
+	private final static String P_RANGES = "ranges_screen";
 	
 	private CheckBoxPreference	p_bAutoStart;
 	private CheckBoxPreference	p_bFgService;
 	private CheckBoxPreference	p_bAlwaysFgService;
 	private CheckBoxPreference	p_bAlertKeepalive;
+	private PreferenceScreen	p_sRanges;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -30,6 +36,7 @@ public class PrefsActivity extends PreferenceActivity {
 		p_bFgService = (CheckBoxPreference) findPreference(P_FOREGROUNDSERVICE);
 		p_bAlwaysFgService = (CheckBoxPreference) findPreference(P_ALWAYSFGSERVICE);
 		p_bAlertKeepalive = (CheckBoxPreference) findPreference(P_ALERTKEEPALIVE);
+		p_sRanges = (PreferenceScreen) findPreference(P_RANGES);
 		
 		p_bAutoStart.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
@@ -89,6 +96,23 @@ public class PrefsActivity extends PreferenceActivity {
 				if(lms != null)
 					lms.startAlertKeepalive(bNewVal);
 				
+				return true;
+			}
+		});
+		
+		p_sRanges.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				try
+				{
+					Intent rangesIntent = new Intent(PrefsActivity.this, RangesActivity.class);
+			        startActivity(rangesIntent);
+			        Log.i(Globals.TAG, "Ranges activity started");
+				} catch(Exception e)
+				{
+					Log.e(Globals.TAG, e.getMessage(), e);
+				}
 				return true;
 			}
 		});

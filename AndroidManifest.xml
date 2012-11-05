@@ -1,11 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="biz.gyrus.yaab"
-    android:versionCode="7"
-    android:versionName="1.5" >
+    android:versionCode="8"
+    android:versionName="1.6" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
+    
+    <uses-feature android:name="android.hardware.sensor.light" android:required="true"/>
+    
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -22,13 +25,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-	    <activity android:name=".CreditsActivity" android:enabled="true" android:launchMode="standard" android:exported="false">
+	    <activity android:name=".CreditsActivity" android:enabled="true" android:label="@string/activity_credits_txt_title" android:launchMode="standard" android:exported="false">
 	    	<intent-filter>
 	    		<action android:name="biz.gyrus.yaab.CREDITS" />
 	    		<category android:name="android.intent.category.DEFAULT" />
 	    	</intent-filter>
 	    </activity>
-	    <activity android:name=".PrefsActivity" android:enabled="true" android:launchMode="standard" android:exported="false">
+	    <activity android:name=".RangesActivity" android:enabled="true" android:label="@string/ranges_title" android:launchMode="standard" android:exported="false">
+	    	<intent-filter>
+	    		<action android:name="biz.gyrus.yaab.RANGES" />
+	    		<category android:name="android.intent.category.DEFAULT" />
+	    	</intent-filter>
+	    </activity>
+	    	    <activity android:name=".PrefsActivity" android:enabled="true" android:label="@string/preferences" android:launchMode="standard" android:exported="false">
 	    	<intent-filter>
 	    		<action android:name="biz.gyrus.yaab.PREFS" />
 	    		<category android:name="android.intent.category.DEFAULT" />

@@ -21,6 +21,11 @@ public class AppSettings {
 	private static final String _persistNotifName = "persistNotification";
 	private static final String _persistNotifAlwaysName = "persistNotificationAlways";
 	private static final String _alertKeepaliveName = "alertKeepalive";
+	private static final String _brightnessMinRangeName = "brightnessMinRange";
+	private static final String _brightnessMaxRangeName = "brightnessMaxRange";
+	private static final String _allowAutoNightName = "allowAutoNight";
+	private static final String _nightModeBrightnessName = "nightModeBrightness";
+	private static final String _nightModeThresholdName = "nightModeThreshold";
 	
 	private Context _ctx = null;
 	private int _verNum = 1;
@@ -154,6 +159,76 @@ public class AppSettings {
 		SharedPreferences.Editor e = getSP().edit();
 		
 		e.putBoolean(_alertKeepaliveName, bAlertKeepalive);
+		
+		commitAndLog(e);
+	}
+	
+	public int getBrightnessMinRange()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getInt(_brightnessMinRangeName, Globals.MIN_BRIGHTNESS_INT);
+	}
+	public void setBrightnessMinRange(int val)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putInt(_brightnessMinRangeName, val);
+		
+		commitAndLog(e);
+	}
+	
+	public int getBrightnessMaxRange()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getInt(_brightnessMaxRangeName, Globals.MAX_BRIGHTNESS_INT);
+	}
+	public void setBrightnessMaxRange(int val)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putInt(_brightnessMaxRangeName, val);
+		
+		commitAndLog(e);
+	}
+	
+	public Boolean getAllowAutoNight()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getBoolean(_allowAutoNightName, false);
+	}
+	public void setAllowAutoNight(boolean bAllow)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putBoolean(_allowAutoNightName, bAllow);
+		
+		commitAndLog(e);
+	}
+	
+	public int getNMBrightness()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getInt(_nightModeBrightnessName, (Globals.MAX_NM_BRIGHTNESS + Globals.MIN_NM_BRIGHTNESS)/2);
+	}
+	public void setNMBrightness(int val)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putInt(_nightModeBrightnessName, val);
+		
+		commitAndLog(e);
+	}
+	
+	public int getNMThreshold()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getInt(_nightModeThresholdName, (int) Globals.MIN_READING_DAY_F);		// historical default
+	}
+	public void setNMThreshold(int val)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putInt(_nightModeThresholdName, val);
 		
 		commitAndLog(e);
 	}

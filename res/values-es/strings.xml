@@ -15,7 +15,7 @@
     
     <string name="manual_adjust">El ajuste manual</string>
 
-    <string name="txt_howto_use">MODO DE EMPLEO: Pulse \"Iniciar\", espere hasta que el cambio de estado a \"Funcionamiento\". Eso es todo. Use \"Ajuste manual\" control deslizante para cambiar el nivel medio de brillo si es necesario.\n"Notificación persistente" puede ser útil en dispositivos que ejecutan sobre Android 3.x y posteriores de 512MB RAM. Ayuda a que el servicio de sobrevivir mientras el sistema está a la caza de los recursos.</string>
+    <string name="txt_howto_use">MODO DE EMPLEO: Pulse \"Iniciar\", espere hasta que el cambio de estado a \"Funcionamiento\". Eso es todo. Use \"Ajuste manual\" control deslizante para cambiar el nivel medio de brillo si es necesario.\n\nModo nocturno automático sólo funcionará si el sensor de luz del dispositivo es capaz de leer los valores bajos.</string>
     <string name="txt_nolightsensor_sorry">Lo sentimos, sensor de luz no se puede encontrar en este dispositivo. Esta aplicación no está funcionar sin el sensor.</string>
 
     <string name="title_activity_credits">Otro Auto Brillo</string>
@@ -31,4 +31,24 @@
 	<string name="alert_keepalive_title">Utilice el sistema de alarma</string>
 	<string name="alert_keepalive_summary">Una suerte de mantener con vida las instalaciones para el servicio. EXPERIMENTAL.</string>
     
+	<string name="ranges_title">Rangos</string>
+	<string name="txt_night">Noche</string>
+	<string name="txt_normal">Normal</string>
+	<string name="ranges_summary">Min, Max, Umbrales, brillo Modo nocturno</string>
+	<string name="brightness_range_caption">Brillo rango</string>
+    <string name="txt_min">Límite mínimo brillo</string>
+    <string name="txt_max">Límite máximo brillo</string>    
+	<string name="night_reading_caption">Modo Nocturno</string>
+	<string name="cb_autonight_text">Modo Nocturno automático</string>
+	<string name="txt_night_threshold">Umbral de Modo Nocturno</string>
+	<string name="txt_night_brightness">Brillo de Modo Nocturno</string>
+	<string name="btn_night_test">Prueba</string>
+	<string name="txt_sensor_reading">Más reciente valor de sensor:</string>
+	<string name="txt_threshold_value">Valor umbral actual:</string>
+	<string name="txt_none">ninguno</string>
+	<string name="brightness_status_off">Apagado</string>
+	<string name="brightness_status_auto">Automático</string>
+	<string name="brightness_status_manualnight">Noche (manual)</string>
+	<string name="brightness_status_autonight">Noche</string>
+	<string name="txt_not_auto_note">Tenga en cuenta que, dado que el servicio no está en modo auto ahora, usted no puede ser capaz de ver el efecto inmediato modificar algunos de estos parámetros.</string>
 </resources>

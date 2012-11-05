@@ -1,5 +1,6 @@
 package biz.gyrus.yaab;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,6 +15,24 @@ public class BrightnessController {
 	public static BrightnessController get() { return _instance; }
 	
 	public enum ServiceStatus { Error, Stopped, Running }
+	public enum BrightnessStatus { Off, Auto, ForceNight, AutoNight }
+	
+	private static class BrightnessStatusObservable extends Observable
+	{
+		private BrightnessStatus _bsCurrent = BrightnessStatus.Off;
+		
+		public BrightnessStatus getStatus() { return _bsCurrent; }
+		
+		public void setStatus(BrightnessStatus status)
+		{
+			if(_bsCurrent != status)
+				setChanged();
+			
+			_bsCurrent = status;
+			
+			notifyObservers();
+		}
+	}
 	
 	private static class ServiceStatusObservable extends Observable
 	{
@@ -47,10 +66,32 @@ public class BrightnessController {
 		}
 	}
 	
+	private static class RunningLSReadingObservable extends Observable
+	{
+		private Float _runningReading = null;
+		
+		public Float getRunningLSReading() { return _runningReading; }
+		public void setRunningLSReading(float reading)
+		{
+			if(_runningReading == null || _runningReading != reading)	// floats are always !=, aren't they? what is this for?
+				setChanged();
+			
+			_runningReading = reading;
+			notifyObservers();
+		}
+	}
+	
 	private Boolean _bIsSensorPresent = null;
 	private int _iManualAdjustmentValue = 0;
 	private ServiceStatusObservable _oServStatus = new ServiceStatusObservable();
+	private BrightnessStatusObservable _oBrightnessStatus = new BrightnessStatusObservable();
 	private RunningBrightnessObservable _oRunningBrightness = new RunningBrightnessObservable();
+	private RunningLSReadingObservable _oRunningReading = new RunningLSReadingObservable();
+	private int _iMinRange = Globals.MIN_BRIGHTNESS_INT;
+	private int _iMaxRange = Globals.MAX_BRIGHTNESS_INT;
+	private boolean _bAutoNight = false;
+	private float _fDimAmount = Globals.DEFAULT_DIMAMOUNT_F;
+	private float _fNightThreshold = Globals.MIN_READING_DAY_F;
 	
 	public boolean isLightSensorPresent(Context ctx)
 	{
@@ -58,8 +99,14 @@ public class BrightnessController {
 		{
 			SensorManager sm = (SensorManager)ctx.getSystemService(Context.SENSOR_SERVICE);
 			Sensor ls = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
+			List<Sensor> list = null;
 			
-			_bIsSensorPresent = (ls != null);
+			if(ls == null)
+			{
+				list = sm.getSensorList(Sensor.TYPE_LIGHT);
+			}
+			
+			_bIsSensorPresent = (ls != null || list.size() > 0);
 		}
 		return _bIsSensorPresent;
 	}
@@ -112,4 +159,39 @@ public class BrightnessController {
 		_oRunningBrightness.setRunningBrightness(brightness);
 	}
 	public int getRunningBrightness() { return _oRunningBrightness.getRunningBrightness(); }
+	
+	public int getBrightnessMin() { return _iMinRange; }
+	public int getBrightnessMax() { return _iMaxRange; }
+	public void setBrightnessMin(int min) { _iMinRange = min; }
+	public void setBrightnessMax(int max) { _iMaxRange = max; }
+	
+	public float getRunningDimAmount() { return _fDimAmount; }
+	public void setRunningDimAmount(float dimAmount) { _fDimAmount = dimAmount; }
+	public boolean isForceNight() { return _oBrightnessStatus.getStatus() == BrightnessStatus.ForceNight; }
+	public void setForceNight(boolean forceNight) { _oBrightnessStatus.setStatus(forceNight ? BrightnessStatus.ForceNight : BrightnessStatus.Auto); }
+	
+	public boolean getAutoNight() { return _bAutoNight; }
+	public void setAutoNight(boolean bAutoNight) { _bAutoNight = bAutoNight; }
+	
+	public float getDimAmount(int sliderSetting)
+	{
+		return -0.01f * sliderSetting + 0.8f;
+	}
+	public int getSliderBrightness(float dimAmount)
+	{
+		return - (int)((dimAmount - 0.8f) * 100);
+	}
+	
+	public float getNightThreshold() { return _fNightThreshold; }
+	public void setNightThreshold(float val) { _fNightThreshold = val; }
+	
+	public void addRunningReadingObserver(Observer o) { _oRunningReading.addObserver(o); }
+	public void removeRunningReadingObserver(Observer o) { _oRunningReading.deleteObserver(o); }
+	public Float getRunningReading() { return _oRunningReading.getRunningLSReading(); }
+	public void setRunningReading(float val) { _oRunningReading.setRunningLSReading(val); }
+	
+	public void addBrightnessStatusObserver(Observer o) { _oBrightnessStatus.addObserver(o); }
+	public void removeBrightnessStatusObserver(Observer o) { _oBrightnessStatus.deleteObserver(o); }
+	public BrightnessStatus getBrightnessStatus() { return _oBrightnessStatus.getStatus(); }
+	public void setBrightnessStatus(BrightnessStatus status) { _oBrightnessStatus.setStatus(status); }
 }

@@ -14,7 +14,6 @@ public class CreditsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_credits);
-		setTitle(R.string.title_activity_credits);
 		
 		TextView txtMain = (TextView) findViewById(R.id.txtMain);
 		txtMain.setMovementMethod(LinkMovementMethod.getInstance());

@@ -31,4 +31,24 @@
 	<string name="alert_keepalive_title">Використовувати системний будильник</string>
 	<string name="alert_keepalive_summary">Дає сервісу ще один шанс вижити при нестачі пам\'яті. ЕКСПЕРИМЕНТАЛЬНО.</string>
         
+	<string name="ranges_title">Діапазони</string>
+	<string name="txt_night">Ніч</string>
+	<string name="txt_normal">Норм.</string>
+	<string name="ranges_summary">Мін., Макс., Порогові значення, Яскравість в ночному режимі</string>
+	<string name="brightness_range_caption">Діапазон яскравості</string>
+    <string name="txt_min">Мінімум</string>
+    <string name="txt_max">Максимум</string>    
+	<string name="night_reading_caption">Нічний режим</string>
+	<string name="cb_autonight_text">Авто Ніч</string>
+	<string name="txt_night_threshold">Порог нічного режиму</string>
+	<string name="txt_night_brightness">Яскравість в нічному режимі</string>
+	<string name="btn_night_test">Тест</string>
+	<string name="txt_sensor_reading">Останнє значення датчика:</string>
+	<string name="txt_threshold_value">Поточний порог:</string>
+	<string name="txt_none">нема</string>
+	<string name="brightness_status_off">Вимкнено</string>
+	<string name="brightness_status_auto">Авто</string>
+	<string name="brightness_status_manualnight">Ніч (ручн.)</string>
+	<string name="brightness_status_autonight">Ніч</string>
+	<string name="txt_not_auto_note">Будь ласка, зверніть увагу, що сервіс не знаходиться в режимі Авто, тому ви не зможете миттєво побачити еффект від зміни деяких параметрів.</string>
 </resources>
