@@ -170,7 +170,7 @@ public class LightMonitorService extends Service {
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			Log.d(Globals.TAG, "Accuracy changed called!");
+			//Log.d(Globals.TAG, "Accuracy changed called!");
 		}
 
 		@Override
@@ -178,7 +178,7 @@ public class LightMonitorService extends Service {
 
 			if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
 				float currentReading = event.values[0] + 0.1f;		// +0.1 is a fix for sensors which can general pure zero as measuring value. avoid Math.log(0) 
-				Log.d(Globals.TAG, String.format("Float brightness: %f", currentReading));
+				//Log.d(Globals.TAG, String.format("Float brightness: %f", currentReading));
 				
 				synchronized (_readings) {
 					_readings.add(new Reading(currentReading, System.currentTimeMillis()));
@@ -325,7 +325,7 @@ public class LightMonitorService extends Service {
 
 	// must be called when incoming sensor change arrives
 	private void kickTimer() {
-		Log.i(Globals.TAG, "kickTimer in action");
+		//Log.i(Globals.TAG, "kickTimer in action");
 		if (_bActive)
 			return;
 
