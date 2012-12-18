@@ -51,4 +51,8 @@
 	<string name="brightness_status_manualnight">Ніч (ручн.)</string>
 	<string name="brightness_status_autonight">Ніч</string>
 	<string name="txt_not_auto_note">Будь ласка, зверніть увагу, що сервіс не знаходиться в режимі Авто, тому ви не зможете миттєво побачити еффект від зміни деяких параметрів.</string>
+	
+	<string name="cb_smooth_title">Повільна яскравість</string>
+	<string name="cb_smooth_summary">Змінювати яскравість поступово, повільно</string>
+		
 </resources>

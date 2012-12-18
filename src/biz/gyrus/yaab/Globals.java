@@ -15,6 +15,9 @@ public class Globals {
 	public static final long MEASURING_FRAME = 5000;	// 5 seconds for now
 	public static final long TIMER_PERIOD = 500;
 	
+	public static final long SMOOTH_TIMER_PERIOD = 12;
+	public static final float SMOOTH_TIMER_MIN_STEP = 0.0001f;
+	
 	// following values used to configure sliders properly, not as executive values
 	public static int MIN_NM_THRESHOLD = 1;
 	public static int MAX_NM_THRESHOLD = 80;

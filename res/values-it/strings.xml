@@ -51,5 +51,8 @@
     <string name="brightness_status_manualnight">Notte (manuale)</string>
     <string name="brightness_status_autonight">Notte</string>
     <string name="txt_not_auto_note">Si noti che dal momento che il servizio è ora in modalità automatica, si potrebbero non vedere immediatamente gli effetti di alcune modifiche in queste impostazioni.</string>
+    
+	<string name="cb_smooth_title">Luminosità graduale</string>
+	<string name="cb_smooth_summary">Applicare le modifiche della luminosità dello schermo lentamente</string>
 
 </resources>

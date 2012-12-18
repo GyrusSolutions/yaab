@@ -52,4 +52,7 @@
 	<string name="brightness_status_autonight">הלילה</string>
 	<string name="txt_not_auto_note">שים לב שמכיוון שהשירות אינו במצב אוטומטי עכשיו, ייתכן שלא תוכל לראות את ההשפעה מיידית של שינוי חלק מהגדרות אלה.</string>
 	
+	<string name="cb_smooth_title">בהירות הדרגתית</string>
+	<string name="cb_smooth_summary">החל שינויי בהירות מסך בצורה חלקה</string>
+
 </resources>

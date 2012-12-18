@@ -51,4 +51,8 @@
 	<string name="brightness_status_manualnight">Noche (manual)</string>
 	<string name="brightness_status_autonight">Noche</string>
 	<string name="txt_not_auto_note">Tenga en cuenta que, dado que el servicio no está en modo auto ahora, usted no puede ser capaz de ver el efecto inmediato modificar algunos de estos parámetros.</string>
+	
+	<string name="cb_smooth_title">Brillo suave</string>
+	<string name="cb_smooth_summary">Aplicar los cambios de brillo de la pantalla lenta</string>
+		
 </resources>

@@ -30,5 +30,12 @@
         android:summary="@string/alert_keepalive_summary"
         />
     
+    <CheckBoxPreference 
+        android:persistent="false"
+        android:key="smooth_brightness_preference"
+        android:title="@string/cb_smooth_title"
+        android:summary="@string/cb_smooth_summary"
+        />
+    
     
 </PreferenceScreen>

@@ -26,6 +26,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -58,13 +59,107 @@ public class LightMonitorService extends Service {
 
 	private ActivatorView _av = null;
 	private WindowManager.LayoutParams _avLayoutParams = null;
+	private float _fScreenBrightness = 0f;
 
 	private static LightMonitorService _instance = null;
 	
 	private PendingIntent _piSelf = null;
 
+	private BrightnessAnimatorRunnable _ba = null;
+	
 	public static LightMonitorService getInstance() {
 		return _instance;
+	}
+	
+	private class BrightnessAnimatorRunnable implements Runnable
+	{
+		private float _to = 0;
+		private float _from = 0;
+		private float _step = 0;
+		private float _current = _from;
+		private boolean _bSmoothTimerActive = false;
+		private WindowManager _wm = null;
+		private int _iStepIdx = 0;
+		private long _iCalculatedSmoothTimerPeriod = Globals.SMOOTH_TIMER_PERIOD;
+		
+		public void start(float from, float to)
+		{
+			_wm = (WindowManager) getSystemService(WINDOW_SERVICE); 
+
+			_from = from;
+			_to = to;
+			_step = (_to - _from)/(Globals.TIMER_PERIOD/Globals.SMOOTH_TIMER_PERIOD + 1);
+			_current = from;
+			_iStepIdx = 0;
+			_iCalculatedSmoothTimerPeriod = Globals.SMOOTH_TIMER_PERIOD;
+			
+			if(Math.abs(_step) < Globals.SMOOTH_TIMER_MIN_STEP)
+				_iCalculatedSmoothTimerPeriod = (int)(Globals.SMOOTH_TIMER_MIN_STEP * Globals.SMOOTH_TIMER_PERIOD / _step);
+			
+//			if(Log.isLoggable(Globals.TAG, Log.DEBUG))
+//				Log.d(Globals.TAG, String.format("animateBrightness, _iCalculatedSmoothTimerPeriod = %d", _iCalculatedSmoothTimerPeriod));
+			
+			if(Math.abs(_step) < Globals.SMOOTH_TIMER_MIN_STEP)
+				smoothTimerApplyVal(_to);
+			else
+			{
+				_bSmoothTimerActive = true;
+			
+//				if(Log.isLoggable(Globals.TAG, Log.DEBUG))
+//					Log.d(Globals.TAG, String.format("animateBrightness, _from = %f, _to = %f, _step = %f", _from, _to, _step));
+		
+				_h.postDelayed(this, _iCalculatedSmoothTimerPeriod);
+			}
+		}
+
+		private void smoothTimerApplyVal(float val)
+		{
+			_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+			_avLayoutParams.screenBrightness = val;
+			if(_wm != null)
+				_wm.updateViewLayout(_av, _avLayoutParams);
+			
+//			if(Log.isLoggable(Globals.TAG, Log.DEBUG))
+//				Log.d(Globals.TAG, String.format("smoothTimer tick, newVal = %f", val));
+			
+		}
+		
+		@Override
+		public void run() {
+			
+			if(_bSmoothTimerActive)
+			{
+				_current += _step;
+				
+				float newVal = _current;
+				if(Math.abs(_to - newVal) < Math.abs(_step) || _iStepIdx > Globals.TIMER_PERIOD / _iCalculatedSmoothTimerPeriod + 1)
+				{
+					newVal = _to;
+					_bSmoothTimerActive = false;
+				}
+				
+				smoothTimerApplyVal(newVal);
+				
+				_iStepIdx++;
+				
+				if(_bSmoothTimerActive)
+					_h.postDelayed(this, _iCalculatedSmoothTimerPeriod);
+				else
+					_wm = null;
+			}
+		}
+		
+		public boolean isActive() { return _bSmoothTimerActive; }
+		
+		public void cancel()
+		{
+			_bSmoothTimerActive = false;
+			
+			smoothTimerApplyVal(_to);
+			
+			_wm = null; 
+		}
+		
 	}
 	
 	private Observer _oBrightnessStatus = new Observer() {
@@ -103,7 +198,7 @@ public class LightMonitorService extends Service {
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				Log.i(Globals.TAG, "ScreenON broadcast received, registering listeners.");
 
-				_sensorManager.registerListener(_listener, _lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+				_sensorManager.registerListener(_listener, _lightSensor, SensorManager.SENSOR_DELAY_UI);
 
 				AppSettings as = new AppSettings(LightMonitorService.this);
 				showNotificationIcon(as.getPersistNotification());
@@ -238,6 +333,7 @@ public class LightMonitorService extends Service {
 			bc.setAutoNight(as.getAllowAutoNight());
 			bc.setRunningDimAmount(bc.getDimAmount(as.getNMBrightness()));
 			bc.setNightThreshold(as.getNMThreshold());
+			bc.setSmoothApplyBrightness(as.getSmoothApplyBrightness());
 
 			_av = new ActivatorView(this);
 			_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0,
@@ -245,7 +341,7 @@ public class LightMonitorService extends Service {
 					WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 							| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
 					PixelFormat.OPAQUE);
-			_avLayoutParams.screenBrightness = 20f;
+			_avLayoutParams.screenBrightness = _fScreenBrightness = 20f;
 
 			WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 			wm.addView(_av, _avLayoutParams);
@@ -302,6 +398,7 @@ public class LightMonitorService extends Service {
 			_sensorManager.unregisterListener(_listener);
 
 		cancelTimer();
+		finishBrightnessAnimation();
 		
 		synchronized (_h) {
 			if (_av != null) {
@@ -342,7 +439,9 @@ public class LightMonitorService extends Service {
 	}
 
 	private void setBrightness(float brightness) {
-		Log.d(Globals.TAG, String.format("setBrightness called, brightness = %f", brightness));
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("setBrightness called, brightness = %f", brightness));
+		
+		finishBrightnessAnimation();
 		
 		BrightnessController bc = BrightnessController.get();
 		
@@ -360,41 +459,46 @@ public class LightMonitorService extends Service {
 			iBrightness = bc.getBrightnessMax();
 
 		Settings.System.putInt(LightMonitorService.this.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, iBrightness);
-		Log.d(Globals.TAG, String.format("putInt with %d called.", iBrightness));
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("putInt with %d called.", iBrightness));
 		
 		synchronized (_h) {
 			if(_av != null && _avLayoutParams != null)		// these will be null when the service is stopping
 			{
+				WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+				
 				if(bUseDim)
 				{
 					_avLayoutParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 					_avLayoutParams.dimAmount = bc.getRunningDimAmount();
 					_avLayoutParams.screenBrightness = (float)Globals.MIN_BRIGHTNESS_INT/Globals.MAX_BRIGHTNESS_INT;
+					wm.updateViewLayout(_av, _avLayoutParams);
 				}
 				else
 				{
-					float fMinBrightness = ((float)bc.getBrightnessMin())/Globals.MAX_BRIGHTNESS_INT;
-					float fMaxBrightness = ((float)bc.getBrightnessMax())/Globals.MAX_BRIGHTNESS_INT;
-					
-					if (brightness > fMaxBrightness)
-						brightness = fMaxBrightness;
-					
-					if (brightness < fMinBrightness)
-						brightness = fMinBrightness;
-		
-					_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-					_avLayoutParams.screenBrightness = brightness;
-					Log.d(Globals.TAG, String.format("setBrightness applying, brightness = %f", brightness));
+					float fNewScreenBrightness = bc.cutLayoutParamsBrightness(brightness);
+					if(bc.getSmoothApplyBrightness())
+					{
+						animateBrightness(
+								_fScreenBrightness, 
+								fNewScreenBrightness);
+						
+					}
+					else
+					{
+						_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+						_avLayoutParams.screenBrightness = fNewScreenBrightness;
+						if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("setBrightness applying, brightness = %f", brightness));
+						wm.updateViewLayout(_av, _avLayoutParams);
+					}
+					_fScreenBrightness = fNewScreenBrightness;
 				}
 				
-				WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-				wm.updateViewLayout(_av, _avLayoutParams);
 			}
 		}
 		
 		bc.setRunningBrightness(iBrightness);
 		
-		Log.d(Globals.TAG, "setBrightness done.");
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "setBrightness done.");
 	}
 
 	public void showNotificationIcon(boolean bShow) {
@@ -424,7 +528,7 @@ public class LightMonitorService extends Service {
 			NotificationCompat.Builder nb = new NotificationCompat.Builder(this);
 			nb.setContentIntent(pi)
 					.setAutoCancel(false)
-					.setSmallIcon(R.drawable.ic_launcher)
+					.setSmallIcon((Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)?R.drawable.ic_notif_white:R.drawable.ic_launcher)
 					.setWhen(System.currentTimeMillis())
 					.setContentTitle(getResources().getString(R.string.app_name))
 					.setContentText(getResources().getString(iStatusRedId));
@@ -456,5 +560,20 @@ public class LightMonitorService extends Service {
 		}
 		
 		Log.d(Globals.TAG, "startAlertKeepalive leave");
+	}
+	
+	private synchronized void animateBrightness(float from, float to)
+	{
+		if(_ba != null && _ba.isActive())
+			finishBrightnessAnimation();
+		
+		_ba = new BrightnessAnimatorRunnable();
+		_ba.start(from, to);
+	}
+	
+	private synchronized void finishBrightnessAnimation()
+	{
+		if(_ba != null)
+			_ba.cancel();
 	}
 }

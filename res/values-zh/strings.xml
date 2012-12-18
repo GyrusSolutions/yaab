@@ -51,4 +51,8 @@
 	<string name="brightness_status_manualnight">夜间（手动）</string>
 	<string name="brightness_status_autonight">夜间</string>
 	<string name="txt_not_auto_note">请注意，因为该服务不是在自动模式下，如果您变其中的一些设置，您可能无发现立竿见影的效果。</string>
+	
+	<string name="cb_smooth_title">光滑的亮度</string>
+	<string name="cb_smooth_summary">适用于屏幕的亮度变化平缓</string>
+	
 </resources>

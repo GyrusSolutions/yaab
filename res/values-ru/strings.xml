@@ -51,4 +51,8 @@
 	<string name="brightness_status_manualnight">Ночь (ручная)</string>
 	<string name="brightness_status_autonight">Ночь</string>
 	<string name="txt_not_auto_note">Пожалуйста, обратите внимание, что сервис сейчас не находится в режиме Авто, вы не сможете немедленно увидеть эффект от изменения некоторых настроек.</string>
+
+	<string name="cb_smooth_title">Плавная яркость</string>
+	<string name="cb_smooth_summary">Изменять яркость экрана по возможности плавно</string>
+	
 </resources>

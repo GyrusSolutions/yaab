@@ -119,10 +119,10 @@ public class MainActivity extends Activity {
         _sbAdjLevel.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) { }
+			public void onStopTrackingTouch(SeekBar seekBar) { BrightnessController.get().blockEffects(false); }
 			
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {	}
+			public void onStartTrackingTouch(SeekBar seekBar) {	BrightnessController.get().blockEffects(true); }
 			
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -230,6 +230,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		BrightnessController.get().blockEffects(false);
 		
 		BrightnessController.get().removeServiceStatusObserver(_oServiceStatus);
         BrightnessController.get().removeRunningBrightnessObserver(_oRunningBrightness);

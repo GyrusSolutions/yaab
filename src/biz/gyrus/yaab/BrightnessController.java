@@ -7,6 +7,7 @@ import java.util.Observer;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class BrightnessController {
 	private BrightnessController(){}
@@ -92,6 +93,8 @@ public class BrightnessController {
 	private boolean _bAutoNight = false;
 	private float _fDimAmount = Globals.DEFAULT_DIMAMOUNT_F;
 	private float _fNightThreshold = Globals.MIN_READING_DAY_F;
+	private Boolean _bSmoothApplyBrightness = null;
+	private boolean _bBlockEffects = false;
 	
 	public boolean isLightSensorPresent(Context ctx)
 	{
@@ -194,4 +197,31 @@ public class BrightnessController {
 	public void removeBrightnessStatusObserver(Observer o) { _oBrightnessStatus.deleteObserver(o); }
 	public BrightnessStatus getBrightnessStatus() { return _oBrightnessStatus.getStatus(); }
 	public void setBrightnessStatus(BrightnessStatus status) { _oBrightnessStatus.setStatus(status); }
+	
+	public boolean getSmoothApplyBrightness() { return _bSmoothApplyBrightness && !_bBlockEffects; }
+	public void setSmoothApplyBrightness(boolean bSmooth) { _bSmoothApplyBrightness = bSmooth; }
+	
+	public float cutLayoutParamsBrightness(float fromReading)
+	{
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG))
+			Log.d(Globals.TAG, String.format("cutLayoutParamsBrightness. input = %f", fromReading));
+		
+		float brightness = fromReading;
+		
+		float fMinBrightness = ((float)_iMinRange)/Globals.MAX_BRIGHTNESS_INT;
+		float fMaxBrightness = ((float)_iMaxRange)/Globals.MAX_BRIGHTNESS_INT;
+		
+		if (brightness > fMaxBrightness)
+			brightness = fMaxBrightness;
+		
+		if (brightness < fMinBrightness)
+			brightness = fMinBrightness;
+
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG))
+			Log.d(Globals.TAG, String.format("cutLayoutParamsBrightness. output = %f", brightness));
+		
+		return brightness;
+	}
+	
+	public void blockEffects(boolean block)	{ _bBlockEffects = block; }
 }

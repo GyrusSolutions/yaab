@@ -51,5 +51,9 @@
 	<string name="brightness_status_manualnight">Night (manual)</string>
 	<string name="brightness_status_autonight">Night</string>
 	<string name="txt_not_auto_note">Please note that since the service is not in auto mode now, you may not be able to see immediate effect of changing some of these settings.</string>
+	
+	<string name="cb_smooth_title">Smooth brightness</string>
+	<string name="cb_smooth_summary">Apply screen brightness changes smoothly</string>
+	
 </resources>
  
