@@ -15,7 +15,6 @@ import biz.gyrus.yaab.BrightnessController.ServiceStatus;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -100,7 +99,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         setTitle(R.string.title_activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         
         _btnStartStop = (Button) findViewById(R.id.btnOnOff);
         _cbAutoStart = (CheckBox) findViewById(R.id.cbAutostart);

@@ -40,11 +40,11 @@
     <string name="txt_max">Максимум</string>    
 	<string name="night_reading_caption">Нічний режим</string>
 	<string name="cb_autonight_text">Авто Ніч</string>
-	<string name="txt_night_threshold">Порог нічного режиму</string>
+	<string name="txt_night_threshold">Поріг нічного режиму</string>
 	<string name="txt_night_brightness">Яскравість в нічному режимі</string>
 	<string name="btn_night_test">Тест</string>
 	<string name="txt_sensor_reading">Останнє значення датчика:</string>
-	<string name="txt_threshold_value">Поточний порог:</string>
+	<string name="txt_threshold_value">Поточний поріг:</string>
 	<string name="txt_none">нема</string>
 	<string name="brightness_status_off">Вимкнено</string>
 	<string name="brightness_status_auto">Авто</string>

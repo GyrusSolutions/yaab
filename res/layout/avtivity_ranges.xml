@@ -5,7 +5,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     >
-
+    
     <TextView
         android:id="@+id/txtCap1"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/txtMin" />
-
+    
     <TextView
         android:id="@+id/txtMax"
         android:layout_width="match_parent"
@@ -130,8 +130,7 @@
         android:layout_below="@id/txtNightBrightness"
         android:layout_toLeftOf="@+id/btnTestBrightness"
         />
-
-    
+    
     <TextView
         android:id="@+id/txtNotAutoWarn"
         android:layout_width="match_parent"

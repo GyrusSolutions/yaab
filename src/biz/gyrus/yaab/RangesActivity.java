@@ -7,7 +7,6 @@ import java.util.Observer;
 import biz.gyrus.yaab.BrightnessController.BrightnessStatus;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -110,7 +109,6 @@ public class RangesActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.avtivity_ranges);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		_sbMin = (SeekBar) findViewById(R.id.sbMin);
 		_sbMax = (SeekBar) findViewById(R.id.sbMax);
