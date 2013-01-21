@@ -39,7 +39,7 @@
     <string name="txt_min">Minimale Helligkeit</string>
     <string name="txt_max">Maximale Helligkeit</string>    
 	<string name="night_reading_caption">Nacht Modus Grenzwert</string>
-	<string name="cb_autonight_text">Automatischer Nacht</string>
+	<string name="cb_autonight_text">Autom. Night Mode</string>
 	<string name="txt_night_threshold">Nacht Modus Grenzwert</string>
 	<string name="txt_night_brightness">Nacht Modus Helligkeit</string>
 	<string name="btn_night_test">Test</string>
