@@ -161,6 +161,10 @@ public class RangesActivity extends Activity {
 				{
 					Integer tval = progress + Globals.MIN_NM_THRESHOLD;
 					_txtCurrentTheshold.setText(tval.toString());
+					
+					BrightnessController bc = BrightnessController.get();
+					bc.setNightThreshold(tval);
+					bc.updateRunningBrightness();
 				}
 			}
 		});
