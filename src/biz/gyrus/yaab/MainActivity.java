@@ -198,7 +198,8 @@ public class MainActivity extends Activity {
 			}
 		});
         
-		_sbNightBrightness.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        _sbNightBrightness.setMax(Globals.MAX_NM_BRIGHTNESS - Globals.MIN_NM_BRIGHTNESS);
+        _sbNightBrightness.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {	}

@@ -213,7 +213,7 @@ public class LightMonitorService extends Service {
 		@Override
 		public void run() {
 			long now = System.currentTimeMillis();
-			Log.d(Globals.TAG, String.format("Timer hit, millis: %d.", now));
+			if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("Timer hit, millis: %d.", now));
 
 			synchronized (_readings) {
 				// cleaning obsolete values which are out of measuring frame
@@ -237,16 +237,16 @@ public class LightMonitorService extends Service {
 					
 					float currentReading = sum / Globals.MEASURING_FRAME;
 	
-					Log.d(Globals.TAG, "AVG reading: " + currentReading);
+					if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "AVG reading: " + currentReading);
 	
 					float currentReadingBrightness = BrightnessController.get().getBrightnessFromReading(currentReading);
 					float currentRunningBrightness = BrightnessController.get().getBrightnessFromReading(_currentRunningReading);
 	
-					Log.d(Globals.TAG, "ReadingBrightness: " + currentReadingBrightness);
-					Log.d(Globals.TAG, "RunningBrightness: " + currentRunningBrightness);
+					if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "ReadingBrightness: " + currentReadingBrightness);
+					if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "RunningBrightness: " + currentRunningBrightness);
 	
 					if (Math.abs(currentReadingBrightness - currentRunningBrightness) > HIST_DELTA_THRESHOLD) {
-						Log.d(Globals.TAG, String.format("Threshold defeated! newReading = %f", currentReading));
+						if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("Threshold defeated! newReading = %f", currentReading));
 						_currentRunningReading = currentReading;
 						BrightnessController.get().setRunningReading(_currentRunningReading);
 						applyRunningReading();
@@ -502,7 +502,7 @@ public class LightMonitorService extends Service {
 	}
 
 	public void showNotificationIcon(boolean bShow) {
-		Log.d(Globals.TAG, String.format("showNotificationIcon entering, bShow = %b", bShow));
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("showNotificationIcon entering, bShow = %b", bShow));
 		
 		if (bShow) {
 			Intent ni = new Intent(this, MainActivity.class);
@@ -541,12 +541,12 @@ public class LightMonitorService extends Service {
 			stopForeground(true);
 		}
 		
-		Log.d(Globals.TAG, "showNotificationIcon leave");
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "showNotificationIcon leave");
 	}
 	
 	public void startAlertKeepalive(boolean bStart)
 	{
-		Log.d(Globals.TAG, String.format("startAlertKeepalive entering, bStart = %b",  bStart));
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, String.format("startAlertKeepalive entering, bStart = %b",  bStart));
 		
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		
@@ -559,7 +559,7 @@ public class LightMonitorService extends Service {
 			am.cancel(_piSelf);
 		}
 		
-		Log.d(Globals.TAG, "startAlertKeepalive leave");
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "startAlertKeepalive leave");
 	}
 	
 	private synchronized void animateBrightness(float from, float to)

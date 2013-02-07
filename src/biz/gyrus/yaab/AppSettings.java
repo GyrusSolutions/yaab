@@ -57,7 +57,7 @@ public class AppSettings {
 	
 	protected void upgradePrefs(SharedPreferences sp)
 	{
-		Log.d(Globals.TAG, "upgradePrefs starting.");
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "upgradePrefs starting.");
 		int iPrevVer = sp.getInt(_saverAppVerName, 1); 
 		SharedPreferences.Editor e = sp.edit();
 		
@@ -72,7 +72,7 @@ public class AppSettings {
 		}
 		
 		commitAndLog(e);
-		Log.d(Globals.TAG, "upgradePrefs done.");
+		if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "upgradePrefs done.");
 	}
 	
 	protected void commitAndLog(SharedPreferences.Editor e)
