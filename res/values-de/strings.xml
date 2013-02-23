@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">YAAB(beta)</string>
+    <string name="app_name">YAAB</string>
     <string name="title_activity_main">Yet Another Auto Brightness</string>
     <string name="btn_start_text">Start</string>
     <string name="btn_stop_text">Stop</string>

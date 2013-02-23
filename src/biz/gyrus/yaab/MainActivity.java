@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
 			_btnNight.setEnabled(true);
 			_btnNight.setText(BrightnessController.get().isForceNight()?R.string.txt_normal:R.string.txt_night);
 			
-			if(BrightnessController.get().getBrightnessStatus() == BrightnessStatus.ForceNight)
+			if(BrightnessController.get().getBrightnessStatus() == BrightnessStatus.ForceNight || BrightnessController.get().getBrightnessStatus() == BrightnessStatus.AutoNight)
 			{
 				_lblManualAdj.setText(R.string.txt_night_brightness);
 				_sbAdjLevel.setVisibility(View.GONE);

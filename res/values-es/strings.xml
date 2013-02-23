@@ -1,7 +1,7 @@
 <resources>
 
-    <string name="app_name">Auto Brillo (beta)</string>
-    <string name="title_activity_main">Otro Auto Brillo</string>
+    <string name="app_name">YAAB</string>
+    <string name="title_activity_main">YAAB</string>
     <string name="btn_start_text">Iniciar</string>
     <string name="btn_stop_text">Parar</string>
     <string name="cb_autostart_text">Iniciar en dispositivo</string>

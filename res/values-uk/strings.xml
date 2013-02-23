@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Автояскравість (бета)</string>
+    <string name="app_name">Автояскравість</string>
     <string name="title_activity_main">Ще Одна Автояскравість</string>
     <string name="btn_start_text">Пуск</string>
     <string name="btn_stop_text">Стоп</string>
