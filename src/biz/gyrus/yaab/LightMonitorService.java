@@ -198,7 +198,7 @@ public class LightMonitorService extends Service {
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				Log.i(Globals.TAG, "ScreenON broadcast received, registering listeners.");
 
-				_sensorManager.registerListener(_listener, _lightSensor, SensorManager.SENSOR_DELAY_UI);
+				_sensorManager.registerListener(_listener, _lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
 				AppSettings as = new AppSettings(LightMonitorService.this);
 				showNotificationIcon(as.getPersistNotification());
