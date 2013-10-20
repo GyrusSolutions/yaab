@@ -334,6 +334,7 @@ public class LightMonitorService extends Service {
 			bc.setRunningDimAmount(bc.getDimAmount(as.getNMBrightness()));
 			bc.setNightThreshold(as.getNMThreshold());
 			bc.setSmoothApplyBrightness(as.getSmoothApplyBrightness());
+			bc.setLowNightmodeValues(as.getLowNightmodeValues());
 
 			_av = new ActivatorView(this);
 			_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0,

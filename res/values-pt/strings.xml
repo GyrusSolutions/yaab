@@ -55,4 +55,7 @@
 	<string name="cb_smooth_title">Brilho suave</string>
 	<string name="cb_smooth_summary">Aplicar as mudanças de brilho suavemente</string>
 	
+	<string name="cb_lownmvalues_title">Baixos valores de modo Noite</string>
+	<string name="cb_lownmvalues_summary">Divida limites da faixa de 10</string>
+
 </resources>

@@ -34,6 +34,8 @@ public class RangesActivity extends Activity {
 	
 	private DecimalFormat _df = new DecimalFormat("#.##");
 	
+	private boolean _bLowNightmodeValues = false;
+	
 	private OnSeekBarChangeListener _sbMinMaxListener = new OnSeekBarChangeListener() {
 		
 		@Override
@@ -160,7 +162,13 @@ public class RangesActivity extends Activity {
 				if(fromUser)
 				{
 					Integer tval = progress + Globals.MIN_NM_THRESHOLD;
-					_txtCurrentTheshold.setText(tval.toString());
+					if(_bLowNightmodeValues)
+					{
+						Float tfval = (float) tval / 10;
+						_txtCurrentTheshold.setText(tfval.toString());
+					}
+					else
+						_txtCurrentTheshold.setText(tval.toString());
 					
 					BrightnessController bc = BrightnessController.get();
 					bc.setNightThreshold(tval);
@@ -205,8 +213,16 @@ public class RangesActivity extends Activity {
 		_sbNightBrightness.setProgress(as.getNMBrightness() - Globals.MIN_NM_BRIGHTNESS);
 		_sbNightThreshold.setProgress(as.getNMThreshold() - Globals.MIN_NM_THRESHOLD);
 		
+		_bLowNightmodeValues = as.getLowNightmodeValues();
+		
 		Integer tval = as.getNMThreshold();
-		_txtCurrentTheshold.setText(tval.toString());
+		if(_bLowNightmodeValues)
+		{
+			Float tfval = (float) tval / 10;
+			_txtCurrentTheshold.setText(tfval.toString());
+		}
+		else
+			_txtCurrentTheshold.setText(tval.toString());
 		
 		Float fval = BrightnessController.get().getRunningReading();
 		if(fval != null)

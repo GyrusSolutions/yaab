@@ -55,4 +55,6 @@
     <string name="cb_smooth_title">平滑亮度</string>
     <string name="cb_smooth_summary">防止屏幕亮度跳变</string>
         	
+	<string name="cb_lownmvalues_title">夜间模式值低</string>
+	<string name="cb_lownmvalues_summary">除以10的范围限制</string>
 </resources>

@@ -37,5 +37,12 @@
         android:summary="@string/cb_smooth_summary"
         />
     
+    <CheckBoxPreference 
+        android:persistent="false"
+        android:key="low_nightmode_values_preference"
+        android:title="@string/cb_lownmvalues_title"
+        android:summary="@string/cb_lownmvalues_summary"
+        />
+    
     
 </PreferenceScreen>

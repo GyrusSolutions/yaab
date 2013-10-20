@@ -54,5 +54,8 @@
 
 	<string name="cb_smooth_title">Sanfte Helligkeit</string>
 	<string name="cb_smooth_summary">Helligkeitsänderung mit sanfterem Verlauf anwenden</string>
+	
+	<string name="cb_lownmvalues_title">Niedrige Werte Nachtmodus</string>
+	<string name="cb_lownmvalues_summary">Teilen Bereichsgrenzen von 10</string>
 </resources>
  

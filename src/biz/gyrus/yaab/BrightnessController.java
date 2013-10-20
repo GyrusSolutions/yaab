@@ -95,6 +95,7 @@ public class BrightnessController {
 	private float _fNightThreshold = Globals.MIN_READING_DAY_F;
 	private Boolean _bSmoothApplyBrightness = null;
 	private boolean _bBlockEffects = false;
+	private boolean _bLowNightmodeValues = false;
 	
 	public boolean isLightSensorPresent(Context ctx)
 	{
@@ -185,7 +186,12 @@ public class BrightnessController {
 		return - (int)((dimAmount - 0.8f) * 100);
 	}
 	
-	public float getNightThreshold() { return _fNightThreshold; }
+	public float getNightThreshold() 
+	{
+		if(_bLowNightmodeValues)
+			return _fNightThreshold / 10;
+		return _fNightThreshold; 
+	}
 	public void setNightThreshold(float val) { _fNightThreshold = val; }
 	
 	public void addRunningReadingObserver(Observer o) { _oRunningReading.addObserver(o); }
@@ -200,6 +206,9 @@ public class BrightnessController {
 	
 	public boolean getSmoothApplyBrightness() { return _bSmoothApplyBrightness && !_bBlockEffects; }
 	public void setSmoothApplyBrightness(boolean bSmooth) { _bSmoothApplyBrightness = bSmooth; }
+	
+	public boolean getLowNightmodeValues() { return _bLowNightmodeValues; }
+	public void setLowNightmodeValues(boolean bLow) { _bLowNightmodeValues = bLow; }
 	
 	public float cutLayoutParamsBrightness(float fromReading)
 	{

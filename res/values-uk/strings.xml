@@ -54,5 +54,8 @@
 	
 	<string name="cb_smooth_title">Повільна яскравість</string>
 	<string name="cb_smooth_summary">Змінювати яскравість поступово, повільно</string>
-		
+	
+	<string name="cb_lownmvalues_title">Низьки межі ночі</string>
+	<string name="cb_lownmvalues_summary">Поділити межі ночі на 10</string>
+			
 </resources>

@@ -55,4 +55,7 @@
 	<string name="cb_smooth_title">Плавная яркость</string>
 	<string name="cb_smooth_summary">Изменять яркость экрана по возможности плавно</string>
 	
+	<string name="cb_lownmvalues_title">Низкие границы ночи</string>
+	<string name="cb_lownmvalues_summary">Поделить границы ночи на 10</string>
+	
 </resources>

@@ -54,5 +54,8 @@
 	
 	<string name="cb_smooth_title">Brillo suave</string>
 	<string name="cb_smooth_summary">Aplicar los cambios de brillo de la pantalla lenta</string>
-		
+
+	<string name="cb_lownmvalues_title">Valores bajos NightMode</string>
+	<string name="cb_lownmvalues_summary">Divida a los límites del rango de 10</string>
+				
 </resources>

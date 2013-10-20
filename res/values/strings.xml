@@ -55,5 +55,8 @@
 	<string name="cb_smooth_title">Smooth brightness</string>
 	<string name="cb_smooth_summary">Apply screen brightness changes smoothly</string>
 	
+	<string name="cb_lownmvalues_title">Low Nightmode Values</string>
+	<string name="cb_lownmvalues_summary">Divide range limits by 10</string>
+	
 </resources>
  

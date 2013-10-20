@@ -55,4 +55,6 @@
 	<string name="cb_smooth_title">בהירות הדרגתית</string>
 	<string name="cb_smooth_summary">החל שינויי בהירות מסך בצורה חלקה</string>
 
+	<string name="cb_lownmvalues_title">ערכים נמוכים מצב לילה</string>
+	<string name="cb_lownmvalues_summary">לחלק את גבולות טווח של 10</string>
 </resources>

@@ -19,6 +19,7 @@ public class PrefsActivity extends PreferenceActivity {
 	private final static String P_ALERTKEEPALIVE = "alert_keepalive_preference";
 	private final static String P_RANGES = "ranges_screen";
 	private final static String P_SMOOTH_BRIGHTNESS = "smooth_brightness_preference";
+	private final static String P_LOW_NIGHTMODE_VALUES = "low_nightmode_values_preference";
 	
 	private CheckBoxPreference	p_bAutoStart;
 	private CheckBoxPreference	p_bFgService;
@@ -26,6 +27,7 @@ public class PrefsActivity extends PreferenceActivity {
 	private CheckBoxPreference	p_bAlertKeepalive;
 	private PreferenceScreen	p_sRanges;
 	private CheckBoxPreference	p_bSmoothBrightness;
+	private CheckBoxPreference	p_bLowNightmodeValues;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -40,6 +42,7 @@ public class PrefsActivity extends PreferenceActivity {
 		p_bAlertKeepalive = (CheckBoxPreference) findPreference(P_ALERTKEEPALIVE);
 		p_sRanges = (PreferenceScreen) findPreference(P_RANGES);
 		p_bSmoothBrightness = (CheckBoxPreference) findPreference(P_SMOOTH_BRIGHTNESS);
+		p_bLowNightmodeValues = (CheckBoxPreference) findPreference(P_LOW_NIGHTMODE_VALUES);
 		
 		p_bAutoStart.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
@@ -134,6 +137,21 @@ public class PrefsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		p_bLowNightmodeValues.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean bNewVal = (Boolean) newValue;
+				
+				AppSettings as = new AppSettings(PrefsActivity.this);
+				as.setLowNightmodeValues(bNewVal);
+				
+				BrightnessController.get().setLowNightmodeValues(bNewVal);
+				
+				return true;
+			}
+		});
 	}
 	
 	@Override
@@ -153,6 +171,7 @@ public class PrefsActivity extends PreferenceActivity {
 		p_bAlwaysFgService.setChecked(as.getPersistAlwaysNotification());
 		p_bAlertKeepalive.setChecked(as.getAlertKeepalive());
 		p_bSmoothBrightness.setChecked(as.getSmoothApplyBrightness());
+		p_bLowNightmodeValues.setChecked(as.getLowNightmodeValues());
 	}
 	
 }

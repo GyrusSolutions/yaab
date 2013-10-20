@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="biz.gyrus.yaab"
-    android:versionCode="20"
-    android:versionName="1.9.6" >
+    android:versionCode="21"
+    android:versionName="1.9.7" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
     
     <uses-feature android:name="android.hardware.sensor.light" android:required="true"/>
     

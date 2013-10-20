@@ -27,6 +27,7 @@ public class AppSettings {
 	private static final String _nightModeBrightnessName = "nightModeBrightness";
 	private static final String _nightModeThresholdName = "nightModeThreshold";
 	private static final String _smoothApplyBrightnessName = "smoothApplyBrightness";
+	private static final String _lowNightmodeValuesName = "lowNightmodeValues";
 	
 	private Context _ctx = null;
 	private int _verNum = 1;
@@ -244,6 +245,20 @@ public class AppSettings {
 		SharedPreferences.Editor e = getSP().edit();
 		
 		e.putBoolean(_smoothApplyBrightnessName, bSmooth);
+		
+		commitAndLog(e);
+	}
+	
+	public Boolean getLowNightmodeValues()
+	{
+		SharedPreferences sp = getSP();
+		return sp.getBoolean(_lowNightmodeValuesName, false);
+	}
+	public void setLowNightmodeValues(boolean bLow)
+	{
+		SharedPreferences.Editor e = getSP().edit();
+		
+		e.putBoolean(_lowNightmodeValuesName, bLow);
 		
 		commitAndLog(e);
 	}
