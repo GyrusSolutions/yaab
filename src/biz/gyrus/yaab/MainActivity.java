@@ -165,6 +165,9 @@ public class MainActivity extends Activity {
 				bc.setForceNight(!bc.isForceNight());
 				bc.updateRunningBrightness();
 				
+				AppSettings s = new AppSettings(MainActivity.this);
+				s.setManualNight(bc.isForceNight());
+				
 				_h.post(new Runnable() {
 					
 					@Override

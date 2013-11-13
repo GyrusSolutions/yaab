@@ -351,7 +351,11 @@ public class LightMonitorService extends Service {
 			registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
 
 			bc.updateServiceStatus(ServiceStatus.Running);
-			bc.setBrightnessStatus(BrightnessStatus.Auto);
+			if(as.getManualNight())
+				bc.setForceNight(true);
+			else
+				bc.setBrightnessStatus(BrightnessStatus.Auto);
+
 		}
 
 		Log.i(Globals.TAG, "Service onCreate() finished");
