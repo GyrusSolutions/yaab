@@ -171,6 +171,29 @@ public class LightMonitorService extends Service {
 		}
 	};
 
+	private Observer _oOrientation = new Observer() {
+		
+		@Override
+		public void update(Observable observable, Object data) {
+			
+			BrightnessController bc = BrightnessController.get();
+			
+			boolean bAutoNight = bc.getAutoNight() && _currentRunningReading < bc.getNightThreshold();
+			boolean bUseDim = bc.isForceNight() || bAutoNight;
+			
+			if(bUseDim)
+			{
+				WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+				
+				_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+				wm.updateViewLayout(_av, _avLayoutParams);
+
+				_avLayoutParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+				wm.updateViewLayout(_av, _avLayoutParams);
+			}
+		}
+	};
+
 	private BroadcastReceiver _brScrOFF = new BroadcastReceiver() {
 
 		@Override
@@ -284,7 +307,7 @@ public class LightMonitorService extends Service {
 
 		}
 	};
-
+	
 	public synchronized void applyRunningReading() {
 		setBrightness(BrightnessController.get().getBrightnessFromReading(_currentRunningReading));
 	}
@@ -349,6 +372,8 @@ public class LightMonitorService extends Service {
 
 			registerReceiver(_brScrOFF, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 			registerReceiver(_brScrON, new IntentFilter(Intent.ACTION_SCREEN_ON));
+			
+			_av.addOrientationObserver(_oOrientation);
 
 			bc.updateServiceStatus(ServiceStatus.Running);
 			if(as.getManualNight())
@@ -393,6 +418,9 @@ public class LightMonitorService extends Service {
 	public void onDestroy() {
 
 		Log.i(Globals.TAG, "Service onDestroy() called");
+		
+		_av.delOrientationObserver(_oOrientation);
+		
 		BrightnessController.get().updateServiceStatus(ServiceStatus.Stopped);
 		BrightnessController.get().setBrightnessStatus(BrightnessStatus.Off);
 
