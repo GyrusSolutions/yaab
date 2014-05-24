@@ -58,4 +58,14 @@
 	<string name="cb_lownmvalues_title">Низкие границы ночи</string>
 	<string name="cb_lownmvalues_summary">Поделить границы ночи на 10</string>
 	
+	<string name="btn_donate_text">Поддержать</string>
+	<string name="activity_donate_txt_title">Поддержать</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">Инициализация биллинга</string>
+	<string name="activity_donate_status_billingfailed">Биллинг недоступен</string>
+	<string name="activity_donate_status_billingok">Продолжайте, пожалуйста</string>
+	<string name="activity_donate_btn_yours">Спасибо!</string>
+				
 </resources>

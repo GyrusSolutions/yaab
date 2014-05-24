@@ -55,8 +55,21 @@
 	<string name="cb_smooth_title">Smooth brightness</string>
 	<string name="cb_smooth_summary">Apply screen brightness changes smoothly</string>
 	
-	<string name="cb_lownmvalues_title">Low Nightmode Values</string>
+	<string name="cb_lownmvalues_title">Low Night Mode Values</string>
 	<string name="cb_lownmvalues_summary">Divide range limits by 10</string>
 	
+	<string name="cb_nightfalldelay_title">Delay Night Mode</string>
+	<string name="cb_nightfalldelay_summary">~5 seconds delay before auto night is on</string>
+	
+	<string name="btn_donate_text">Donate</string>
+	<string name="activity_donate_txt_title">Donate</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">Initializing Google Play billing</string>
+	<string name="activity_donate_status_billingfailed">Google Play billing inaccessible</string>
+	<string name="activity_donate_status_billingok">Please proceed</string>
+	<string name="activity_donate_btn_yours">Thanks!</string>
+				
 </resources>
  

@@ -50,6 +50,7 @@ public class LightMonitorService extends Service {
 	}
 
 	private boolean _bActive = false;
+	private boolean _bAllowNightFall = false;
 	private Handler _h = new Handler();
 	private SensorManager _sensorManager = null;
 	private Sensor _lightSensor = null;
@@ -231,6 +232,17 @@ public class LightMonitorService extends Service {
 		}
 	};
 
+	private Runnable _nightFallDelayHandler = new Runnable() {
+		
+		@Override
+		public void run() {
+			_bAllowNightFall = true;
+			_h.removeCallbacks(_nightFallDelayHandler);
+			if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "NightFallHandler: delay time passed, night allowed");
+			applyRunningReading();
+		}
+	};
+	
 	private Runnable _timerHandler = new Runnable() {
 
 		@Override
@@ -358,6 +370,7 @@ public class LightMonitorService extends Service {
 			bc.setNightThreshold(as.getNMThreshold());
 			bc.setSmoothApplyBrightness(as.getSmoothApplyBrightness());
 			bc.setLowNightmodeValues(as.getLowNightmodeValues());
+			bc.setNightFallDelay(as.getNightfallDelay());
 
 			_av = new ActivatorView(this);
 			_avLayoutParams = new WindowManager.LayoutParams(0, 0, 0, 0,
@@ -478,7 +491,25 @@ public class LightMonitorService extends Service {
 		
 		BrightnessController bc = BrightnessController.get();
 		
-		boolean bAutoNight = bc.getAutoNight() && _currentRunningReading < bc.getNightThreshold();
+		boolean bNightReading = _currentRunningReading < bc.getNightThreshold();
+		if(bc.getNightFallDelay())
+		{
+			if(bNightReading)
+			{
+				if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "Caught night reading, posting nightFall handler");
+				_h.postDelayed(_nightFallDelayHandler, Globals.DEFAULT_NIGHTFALL_DELAY);
+			}
+			else
+			{
+				if(Log.isLoggable(Globals.TAG, Log.DEBUG)) Log.d(Globals.TAG, "Caught day reading, removing nightFall handler");
+				_h.removeCallbacks(_nightFallDelayHandler);
+				_bAllowNightFall = false;
+			}
+		}
+		else
+			_bAllowNightFall = true;
+		
+		boolean bAutoNight = bc.getAutoNight() && bNightReading && _bAllowNightFall;
 		boolean bUseDim = bc.isForceNight() || bAutoNight;
 		
 		if(!bc.isForceNight())

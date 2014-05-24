@@ -98,11 +98,19 @@
         android:id="@+id/lblHowToUse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sbAdjLevel"
-        android:layout_alignRight="@+id/sbAdjLevel"
+        android:layout_alignLeft="@+id/seekBox"
+        android:layout_alignRight="@+id/seekBox"
         android:layout_below="@+id/seekBox"
         android:layout_marginTop="26dp"
         android:text="@string/txt_howto_use" />
 
+    <Button
+        android:id="@+id/btnDonate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnNight"
+        android:layout_below="@+id/lblHowToUse"
+        android:layout_marginTop="18dp"
+        android:text="@string/btn_donate_text" />
 
 </RelativeLayout>

@@ -58,4 +58,14 @@
 	<string name="cb_lownmvalues_title">Baixos valores de modo Noite</string>
 	<string name="cb_lownmvalues_summary">Divida limites da faixa de 10</string>
 
+	<string name="btn_donate_text">Doar</string>
+	<string name="activity_donate_txt_title">Doar</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">Inicializar Google Play faturamento</string>
+	<string name="activity_donate_status_billingfailed">Google Play faturamento inacessível</string>
+	<string name="activity_donate_status_billingok">Por favor, proceda</string>
+	<string name="activity_donate_btn_yours">Obrigado</string>
+				
 </resources>

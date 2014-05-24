@@ -20,6 +20,7 @@ public class PrefsActivity extends PreferenceActivity {
 	private final static String P_RANGES = "ranges_screen";
 	private final static String P_SMOOTH_BRIGHTNESS = "smooth_brightness_preference";
 	private final static String P_LOW_NIGHTMODE_VALUES = "low_nightmode_values_preference";
+	private final static String P_NIGHTFALL_DELAY = "nightfall_delay_preference"; 
 	
 	private CheckBoxPreference	p_bAutoStart;
 	private CheckBoxPreference	p_bFgService;
@@ -28,6 +29,7 @@ public class PrefsActivity extends PreferenceActivity {
 	private PreferenceScreen	p_sRanges;
 	private CheckBoxPreference	p_bSmoothBrightness;
 	private CheckBoxPreference	p_bLowNightmodeValues;
+	private CheckBoxPreference	p_bNightfallDelay;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -43,6 +45,7 @@ public class PrefsActivity extends PreferenceActivity {
 		p_sRanges = (PreferenceScreen) findPreference(P_RANGES);
 		p_bSmoothBrightness = (CheckBoxPreference) findPreference(P_SMOOTH_BRIGHTNESS);
 		p_bLowNightmodeValues = (CheckBoxPreference) findPreference(P_LOW_NIGHTMODE_VALUES);
+		p_bNightfallDelay = (CheckBoxPreference) findPreference(P_NIGHTFALL_DELAY);
 		
 		p_bAutoStart.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
@@ -152,6 +155,21 @@ public class PrefsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		p_bNightfallDelay.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean bNewVal = (Boolean) newValue;
+				
+				AppSettings as = new AppSettings(PrefsActivity.this);
+				as.setNightfallDelay(bNewVal);
+				
+				BrightnessController.get().setNightFallDelay(bNewVal);
+				
+				return true;
+			}
+		});
 	}
 	
 	@Override
@@ -172,6 +190,7 @@ public class PrefsActivity extends PreferenceActivity {
 		p_bAlertKeepalive.setChecked(as.getAlertKeepalive());
 		p_bSmoothBrightness.setChecked(as.getSmoothApplyBrightness());
 		p_bLowNightmodeValues.setChecked(as.getLowNightmodeValues());
+		p_bNightfallDelay.setChecked(as.getNightfallDelay());
 	}
 	
 }

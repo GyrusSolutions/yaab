@@ -58,4 +58,14 @@
 	<string name="cb_lownmvalues_title">Low Nightmode Values</string>
 	<string name="cb_lownmvalues_summary">Divide range limits by 10</string>
 	
+	<string name="btn_donate_text">Donare</string>
+	<string name="activity_donate_txt_title">Donare</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">Inizializzazione Google Play fatturazione</string>
+	<string name="activity_donate_status_billingfailed">Google Play fatturazione inaccessibile</string>
+	<string name="activity_donate_status_billingok">Si prega di procedere</string>
+	<string name="activity_donate_btn_yours">Grazie</string>
+				
 </resources>

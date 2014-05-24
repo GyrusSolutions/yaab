@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
 	private CheckBox _cbAutoNight = null;
 	private Handler _h = new Handler();
 	private SeekBar _sbNightBrightness = null;
+	private Button _btnDonate = null;
 	
 	private Observer _oServiceStatus = new Observer() {
 		
@@ -110,6 +111,7 @@ public class MainActivity extends Activity {
         _btnNight = (Button) findViewById(R.id.btnNight);
         _cbAutoNight = (CheckBox) findViewById(R.id.cbAutonight);
         _sbNightBrightness = (SeekBar) findViewById(R.id.sbNightBrightness);
+        _btnDonate = (Button) findViewById(R.id.btnDonate);
         
         _pbCurrent.setMax(Globals.MAX_BRIGHTNESS_INT);
         
@@ -218,6 +220,15 @@ public class MainActivity extends Activity {
 					bc.setRunningDimAmount(bc.getDimAmount(progress + Globals.MIN_NM_BRIGHTNESS));
 					bc.updateRunningBrightness();
 				}
+			}
+		});
+        
+        _btnDonate.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+		        startActivity(new Intent("biz.gyrus.yaab.DONATE"));
 			}
 		});
 		
@@ -380,6 +391,19 @@ public class MainActivity extends Activity {
 				Intent creditsIntent = new Intent("biz.gyrus.yaab.CREDITS");
 		        startActivity(creditsIntent);
 		        Log.i(Globals.TAG, "Credits activity started");
+			} catch(Exception e)
+			{
+				Log.e(Globals.TAG, e.getMessage(), e);
+			}
+			
+			return true;
+			
+		case R.id.miDonate:
+			try
+			{
+				Intent donateIntent = new Intent("biz.gyrus.yaab.DONATE");
+		        startActivity(donateIntent);
+		        Log.i(Globals.TAG, "Donate activity started");
 			} catch(Exception e)
 			{
 				Log.e(Globals.TAG, e.getMessage(), e);

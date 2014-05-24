@@ -95,15 +95,24 @@
         android:visibility="gone"
         />
     	</LinearLayout>
+
     <TextView
         android:id="@+id/lblHowToUse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sbAdjLevel"
-        android:layout_alignRight="@+id/sbAdjLevel"
+        android:layout_alignLeft="@+id/seekBox"
         android:layout_below="@+id/seekBox"
         android:layout_marginTop="2dip"
+        android:layout_toLeftOf="@+id/btnNight"
         android:text="@string/txt_howto_use" />
 
+    <Button
+        android:id="@+id/btnDonate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/lblHowToUse"
+        android:layout_toRightOf="@+id/lblHowToUse"
+        android:text="@string/btn_donate_text" />
 
 </RelativeLayout>

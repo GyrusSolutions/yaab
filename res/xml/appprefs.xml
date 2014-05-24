@@ -44,5 +44,12 @@
         android:summary="@string/cb_lownmvalues_summary"
         />
     
+    <CheckBoxPreference 
+        android:persistent="false"
+        android:key="nightfall_delay_preference"
+        android:title="@string/cb_nightfalldelay_title"
+        android:summary="@string/cb_nightfalldelay_summary"
+        />
+    
     
 </PreferenceScreen>

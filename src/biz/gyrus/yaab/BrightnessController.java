@@ -96,6 +96,7 @@ public class BrightnessController {
 	private Boolean _bSmoothApplyBrightness = null;
 	private boolean _bBlockEffects = false;
 	private boolean _bLowNightmodeValues = false;
+	private boolean _bNightFallDelay = false;
 	
 	public boolean isLightSensorPresent(Context ctx)
 	{
@@ -209,6 +210,9 @@ public class BrightnessController {
 	
 	public boolean getLowNightmodeValues() { return _bLowNightmodeValues; }
 	public void setLowNightmodeValues(boolean bLow) { _bLowNightmodeValues = bLow; }
+	
+	public boolean getNightFallDelay() { return _bNightFallDelay; }
+	public void setNightFallDelay(boolean bNightFallDelay) { _bNightFallDelay = bNightFallDelay; }
 	
 	public float cutLayoutParamsBrightness(float fromReading)
 	{

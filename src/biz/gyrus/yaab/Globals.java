@@ -23,4 +23,7 @@ public class Globals {
 	public static int MAX_NM_THRESHOLD = 80;
 	public static int MIN_NM_BRIGHTNESS = 0;
 	public static int MAX_NM_BRIGHTNESS = 60;
+	
+	public static final long DEFAULT_NIGHTFALL_DELAY = 5000;		// 5 seconds
+
 }

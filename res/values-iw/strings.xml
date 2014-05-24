@@ -57,4 +57,15 @@
 
 	<string name="cb_lownmvalues_title">ערכים נמוכים מצב לילה</string>
 	<string name="cb_lownmvalues_summary">לחלק את גבולות טווח של 10</string>
+	
+	<string name="btn_donate_text">לתרום</string>
+	<string name="activity_donate_txt_title">לתרום</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">אתחול Google Play חיוב</string>
+	<string name="activity_donate_status_billingfailed">Google Play חיוב נגיש</string>
+	<string name="activity_donate_status_billingok">אנא המשך</string>
+	<string name="activity_donate_btn_yours">תודה</string>
+		
 </resources>

@@ -57,4 +57,15 @@
         	
 	<string name="cb_lownmvalues_title">夜间模式值低</string>
 	<string name="cb_lownmvalues_summary">除以10的范围限制</string>
+
+	<string name="btn_donate_text">捐赠</string>
+	<string name="activity_donate_txt_title">捐赠</string>
+	<string name="activity_donate_btn1_text">~ 1 USD</string>
+	<string name="activity_donate_btn2_text">~ 2 USD</string>
+	<string name="activity_donate_btn3_text">~ 3 USD</string>
+	<string name="activity_donate_status_initializingbilling">初始化谷歌播放计费</string>
+	<string name="activity_donate_status_billingfailed">谷歌播放人迹罕至计费</string>
+	<string name="activity_donate_status_billingok">请继续</string>
+	<string name="activity_donate_btn_yours">谢谢!</string>
+	
 </resources>
