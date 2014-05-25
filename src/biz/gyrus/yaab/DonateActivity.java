@@ -84,7 +84,7 @@ public class DonateActivity extends Activity {
 				            else
 				            	_btnDonate2.setEnabled(true);
 							
-				            Purchase pDon3 = inv.getPurchase(SKU_DONATE1);
+				            Purchase pDon3 = inv.getPurchase(SKU_DONATE3);
 				            if(pDon3 != null)
 				            {
 				            	_btnDonate3.setEnabled(false);
