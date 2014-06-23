@@ -115,10 +115,13 @@ public class LightMonitorService extends Service {
 
 		private void smoothTimerApplyVal(float val)
 		{
-			_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-			_avLayoutParams.screenBrightness = val;
-			if(_wm != null)
-				_wm.updateViewLayout(_av, _avLayoutParams);
+			if(_avLayoutParams != null)
+			{
+				_avLayoutParams.flags &= ~(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+				_avLayoutParams.screenBrightness = val;
+				if(_wm != null)
+					_wm.updateViewLayout(_av, _avLayoutParams);
+			}
 			
 //			if(Log.isLoggable(Globals.TAG, Log.DEBUG))
 //				Log.d(Globals.TAG, String.format("smoothTimer tick, newVal = %f", val));

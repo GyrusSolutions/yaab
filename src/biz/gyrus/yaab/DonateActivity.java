@@ -106,8 +106,14 @@ public class DonateActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				if(_iabHelper != null)
-					_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE1, RC_REQUEST, _purchaseFinishedListener);
+				try
+				{
+					if(_iabHelper != null)
+						_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE1, RC_REQUEST, _purchaseFinishedListener);
+				} catch(IllegalStateException ise)
+				{
+					Log.e(Globals.TAG, "Error launching purchase flow, SKU_DONATE1", ise);
+				}
 				
 			}
 		});
@@ -116,8 +122,14 @@ public class DonateActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				if(_iabHelper != null)
-					_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE2, RC_REQUEST, _purchaseFinishedListener);
+				try
+				{
+					if(_iabHelper != null)
+						_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE2, RC_REQUEST, _purchaseFinishedListener);
+				} catch(IllegalStateException ise)
+				{
+					Log.e(Globals.TAG, "Error launching purchase flow, SKU_DONATE2", ise);
+				}
 				
 			}
 		});
@@ -126,8 +138,14 @@ public class DonateActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				if(_iabHelper != null)
-					_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE3, RC_REQUEST, _purchaseFinishedListener);
+				try
+				{
+					if(_iabHelper != null)
+						_iabHelper.launchPurchaseFlow(DonateActivity.this, SKU_DONATE3, RC_REQUEST, _purchaseFinishedListener);
+				} catch(IllegalStateException ise)
+				{
+					Log.e(Globals.TAG, "Error launching purchase flow, SKU_DONATE3", ise);
+				}
 				
 			}
 		});
