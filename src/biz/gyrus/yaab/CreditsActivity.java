@@ -1,13 +1,12 @@
 package biz.gyrus.yaab;
 
-import android.app.Activity;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CreditsActivity extends Activity {
+public class CreditsActivity extends ThemedActivity {
 
 	protected void onCreate(android.os.Bundle savedInstanceState) 
 	{

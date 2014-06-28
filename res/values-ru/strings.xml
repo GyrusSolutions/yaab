@@ -58,7 +58,10 @@
 	<string name="cb_lownmvalues_title">Низкие границы ночи</string>
 	<string name="cb_lownmvalues_summary">Поделить границы ночи на 10</string>
 	
-	<string name="btn_donate_text">Поддержать</string>
+	<string name="cb_nightfalldelay_title">Задержка Ночи</string>
+	<string name="cb_nightfalldelay_summary">~5 сек. перед включением ночи</string>
+	
+		<string name="btn_donate_text">Поддержать</string>
 	<string name="activity_donate_txt_title">Поддержать</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>
 	<string name="activity_donate_btn2_text">~ 2 USD</string>

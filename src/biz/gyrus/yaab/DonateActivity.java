@@ -5,7 +5,6 @@ import biz.gyrus.yaab.billing.util.IabHelper.QueryInventoryFinishedListener;
 import biz.gyrus.yaab.billing.util.IabResult;
 import biz.gyrus.yaab.billing.util.Inventory;
 import biz.gyrus.yaab.billing.util.Purchase;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class DonateActivity extends Activity {
+public class DonateActivity extends ThemedActivity {
 
     static final String SKU_DONATE1 = "yaab.donate.1";
     //static final String SKU_DONATE1 = "android.test.purchased";
@@ -43,7 +42,7 @@ public class DonateActivity extends Activity {
 		String base64EncodedPublicKey = "Kilroy was here";
 
 		_iabHelper = new IabHelper(this, base64EncodedPublicKey);
-
+ 
 		_iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 			
 			public void onIabSetupFinished(IabResult result) 

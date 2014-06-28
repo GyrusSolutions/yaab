@@ -58,7 +58,10 @@
 	<string name="cb_lownmvalues_title">Низьки межі ночі</string>
 	<string name="cb_lownmvalues_summary">Поділити межі ночі на 10</string>
 			
-	<string name="btn_donate_text">Підтримати</string>
+	<string name="cb_nightfalldelay_title">Затримка нічного режиму</string>
+	<string name="cb_nightfalldelay_summary">~5 сек. перед ввімкненням ночі</string>
+	
+		<string name="btn_donate_text">Підтримати</string>
 	<string name="activity_donate_txt_title">Підтримати</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>
 	<string name="activity_donate_btn2_text">~ 2 USD</string>

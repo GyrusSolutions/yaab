@@ -6,7 +6,6 @@ import java.util.Observer;
 
 import biz.gyrus.yaab.BrightnessController.BrightnessStatus;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class RangesActivity extends Activity {
+public class RangesActivity extends ThemedActivity {
 
 	private SeekBar _sbMin = null;
 	private SeekBar _sbMax = null;
@@ -185,12 +184,14 @@ public class RangesActivity extends Activity {
 				{
 				case MotionEvent.ACTION_DOWN:
 					_bInTest = true;
+					setAllowChangeThemeOnFly(false);
 					BrightnessController.get().setForceNight(true);
 					BrightnessController.get().updateRunningBrightness();
 					return true;
 				case MotionEvent.ACTION_UP:
 					BrightnessController.get().setForceNight(false);
 					BrightnessController.get().updateRunningBrightness();
+					setAllowChangeThemeOnFly(true);
 					_bInTest = false;
 					return true;
 				default:

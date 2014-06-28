@@ -34,6 +34,9 @@ public class PrefsActivity extends PreferenceActivity {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		ThemeHelper.onActivityApplyCurrentTheme(this);
+		
 		super.onCreate(savedInstanceState);
 		
 		addPreferencesFromResource(R.xml.appprefs);

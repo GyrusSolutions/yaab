@@ -58,7 +58,10 @@
 	<string name="cb_lownmvalues_title">Niedrige Werte Nachtmodus</string>
 	<string name="cb_lownmvalues_summary">Teilen Bereichsgrenzen von 10</string>
 	
-	<string name="btn_donate_text">Spenden</string>
+	<string name="cb_nightfalldelay_title">Nachtmodus Verzögerung</string>
+	<string name="cb_nightfalldelay_summary">~ 5 Sekunden Verzögerung, bevor Auto Nacht auf</string>
+	
+		<string name="btn_donate_text">Spenden</string>
 	<string name="activity_donate_txt_title">Spenden</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>
 	<string name="activity_donate_btn2_text">~ 2 USD</string>

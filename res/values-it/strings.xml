@@ -58,7 +58,10 @@
 	<string name="cb_lownmvalues_title">Low Nightmode Values</string>
 	<string name="cb_lownmvalues_summary">Divide range limits by 10</string>
 	
-	<string name="btn_donate_text">Donare</string>
+	<string name="cb_nightfalldelay_title">Ritardo Night Mode</string>
+	<string name="cb_nightfalldelay_summary">~ 5 secondi di ritardo prima auto di notte è in</string>
+	
+		<string name="btn_donate_text">Donare</string>
 	<string name="activity_donate_txt_title">Donare</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>
 	<string name="activity_donate_btn2_text">~ 2 USD</string>

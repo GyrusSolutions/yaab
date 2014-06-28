@@ -58,6 +58,9 @@
 	<string name="cb_lownmvalues_title">ערכים נמוכים מצב לילה</string>
 	<string name="cb_lownmvalues_summary">לחלק את גבולות טווח של 10</string>
 	
+	<string name="cb_nightfalldelay_title">עיכוב מצב הלילה</string>
+	<string name="cb_nightfalldelay_summary">~ עיכוב 5 שניות לפני שהלילה אוטומטי הוא על</string>
+	
 	<string name="btn_donate_text">לתרום</string>
 	<string name="activity_donate_txt_title">לתרום</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>

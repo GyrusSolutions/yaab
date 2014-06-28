@@ -12,7 +12,6 @@ import java.util.Observer;
 import biz.gyrus.yaab.BrightnessController.BrightnessStatus;
 import biz.gyrus.yaab.BrightnessController.ServiceStatus;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +31,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ThemedActivity {
 	
 	private Button _btnStartStop = null;
 	private CheckBox _cbAutoStart = null;
@@ -96,7 +95,7 @@ public class MainActivity extends Activity {
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         setTitle(R.string.title_activity_main);

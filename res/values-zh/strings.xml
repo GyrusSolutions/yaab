@@ -58,7 +58,10 @@
 	<string name="cb_lownmvalues_title">夜间模式值低</string>
 	<string name="cb_lownmvalues_summary">除以10的范围限制</string>
 
-	<string name="btn_donate_text">捐赠</string>
+	<string name="cb_nightfalldelay_title">夜间模式延迟</string>
+	<string name="cb_nightfalldelay_summary">〜延迟前5秒自动住一晚</string>
+	
+		<string name="btn_donate_text">捐赠</string>
 	<string name="activity_donate_txt_title">捐赠</string>
 	<string name="activity_donate_btn1_text">~ 1 USD</string>
 	<string name="activity_donate_btn2_text">~ 2 USD</string>
